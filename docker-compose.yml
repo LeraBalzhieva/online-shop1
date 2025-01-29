@@ -8,12 +8,10 @@ services:
       - ./Docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
       - .:/var/www/html
 
-
   php-fpm:
     build: ./Docker/php
     volumes:
       - .:/var/www/html
-
 
   db:
     image: postgres:13
