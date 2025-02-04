@@ -20,6 +20,15 @@ function validate(array $data) {
             $errors['email'] = "Email не может содержать меньше 3 символов";
         } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $errors['email'] = "Некорректный email";
+        } else {
+            // соединение с БД
+            $pdo = new PDO('pgsql:host=db; port=5432;dbname=mydb', 'user', 'pwd');
+            $stmt = $pdo->prepare("SELECT COUNT(*) FROM users WHERE email = :email");
+            $stmt->execute([':email' => $email]);
+            $count = $stmt->fetchColumn();
+            if ($count > 0) {
+                $errors['email'] = "Этот Email уже зарегестрирован!";
+            }
         }
     } else {
         $errors['email'] = "Email должен быть заполнен";
@@ -40,16 +49,7 @@ function validate(array $data) {
         $errors['psw-repeat'] = "Пароли не совпадают!";
     }
 
-// соединение с БД
-    $pdo = new PDO('pgsql:host=db; port=5432;dbname=mydb', 'user', 'pwd');
 
-// проверка уникальности почты
-    $stmt = $pdo->prepare("SELECT COUNT(*) FROM users WHERE email = :email");
-    $stmt->execute([':email' => $email]);
-    $count = $stmt->fetchColumn();
-    if ($count > 0) {
-        $errors['email'] = "Этот Email уже зарегестрирован!";
-    }
 return $errors;
 }
 
