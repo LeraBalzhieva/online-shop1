@@ -1,13 +1,16 @@
 <?php
 
+session_start();
 
-if (isset($_SESSION['user_id'])) {
+if (isset($_SESSION['userId'])) {
+    $pdo = new PDO('pgsql:host=db; port=5432;dbname=mydb', 'user', 'pwd');
+//добавление пользователей
+    $stmt = $pdo->query('SELECT * FROM products');
+    $products = $stmt->fetchAll();
+    require_once './catalog_page.php';
+
+} else {
     header("Location: /login_form.php");
 }
 
-$pdo = new PDO('pgsql:host=db; port=5432;dbname=mydb', 'user', 'pwd');
-//добавление пользователей
-$stmt = $pdo->query('SELECT * FROM products');
-$products = $stmt->fetchAll();
 
-require_once './catalog_page.php';

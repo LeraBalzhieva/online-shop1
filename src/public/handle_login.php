@@ -5,6 +5,7 @@ $errors = [];
 // проверка наличия переменный
 if (isset($_POST["username"]) && isset($_POST["password"])) {
     $username = $_POST["username"];
+    // разделить
     $password = $_POST["password"];
     if (empty($username)) {
         $errors['username'] = "Поле Username обязательно для заполнения!";
@@ -28,8 +29,8 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 
                 //успешный вход через сессии
                 session_start();
-                $_SESSION['user_id'] = $user['id'];
-                $_SESSION['user_name'] = $user['name'];
+                $_SESSION['userId'] = $user['id'];
+                $_SESSION['userName'] = $user['name'];
 
                 //успешный вход через куки
                 //setcookie('user_id', $user['id']);
