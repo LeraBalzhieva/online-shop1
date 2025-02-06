@@ -1,7 +1,8 @@
 <?php
 
 
-function validate(array $data) {
+function validate(array $data): array
+{
     $errors = [];
 
 // объявление и валидация данных
@@ -33,24 +34,20 @@ function validate(array $data) {
     } else {
         $errors['email'] = "Email должен быть заполнен";
     }
-
 // проверка совпадения паролей
     if (isset($data['psw'])) {
         $password = $data['psw'];
         if (strlen($password) < 3) {
             $errors['psw'] = "Пароль не может содержать меньше 3 символов";
         }
+        $passwordRepeat = $data["psw-repeat"];
+        if ($password !== $passwordRepeat) {
+            $errors['psw-repeat'] = "Пароли не совпадают!";
+        }
     } else {
         $errors['psw'] = "Пароль должен быть заполнен!";
     }
-
-    $passwordRepeat = $data["psw-repeat"];
-    if ($password !== $passwordRepeat) {
-        $errors['psw-repeat'] = "Пароли не совпадают!";
-    }
-
-
-return $errors;
+    return $errors;
 }
 
 $errors = validate($_POST);
@@ -74,8 +71,6 @@ if (empty($errors)) {
 
     $result = $stmt->fetch();
     print_r ($result);
-
 }
-
 require_once './registration_form.php';
 

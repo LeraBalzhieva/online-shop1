@@ -31,8 +31,12 @@
             <label style="color: red"><?php echo $errors['psw-repeat'];?></label>
         <?php endif; ?>
         <input type="password" placeholder="Repeat Password" name="psw-repeat" id="psw-repeat" required>
-        <hr>
 
+
+        <label for="name"><b>Photo</b></label>
+            <label style="color: red"></label>
+        <input type="text" placeholder="upload photo" name="photo" id="photo" required>
+        <hr>
         <p>By creating an account you agree to our <a href="#">Terms & Privacy</a>.</p>
         <button type="submit" class="registerbtn">Register</button>
     </div>
