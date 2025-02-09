@@ -1,12 +1,3 @@
-<?php
-
-session_start();
-
-$pdo = new PDO('pgsql:host=db; port=5432;dbname=mydb', 'user', 'pwd');
-$stmt = $pdo->query('SELECT * FROM users WHERE id = ' . $_SESSION['userId']);
-$users = $stmt->fetchAll();
-
-?>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.0/css/bootstrap.min.css" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
@@ -52,10 +43,14 @@ $users = $stmt->fetchAll();
                                     <tr><td class="active">Имя: </td><td> <?php echo $user['name']; ?> </td></tr>
                                     <tr><td class="active">Email:</td><td> <?php echo $user['email']; ?> </td></tr>
                                     <tr><td class="active">Страна:</td><td>Россия</td></tr>
-                                   </tbody>
+
+                                    <td class="panel"> <a href="/catalog">Назад в каталог</a></td>
+                                    </tbody>
                                 </table>
 
-                                <a href="/catalog.php">Назад в каталог</a>
+
+
+                                <a href="/profile_change">Изменить профиль</a>
                             </div>
 
                         </div>

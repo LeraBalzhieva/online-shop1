@@ -1,22 +1,19 @@
 <div class="container">
-    <a href="/profile">Мой профиль</a>
-    <a href="/add-product">Добавить товары в коризну</a>
 
-    <h3>Catalog</h3>
+    <h3>Cart</h3>
     <div class="card-deck">
-        <?php foreach ($products as $product): ?>
-            <div class="card text-center">
-
+        <div class="card text-center">
+            <?php foreach ($user_products as $user_product): ?>
                 <a href="#">
                     <div class="card-header">
 
                     </div>
-                    <img class="card-img-top" src="<?php echo $product['image_url']; ?>" alt="Card image">
+
                     <div class="card-body">
-                        <p class="card-text text-muted"><?php echo $product['name']; ?></p>
-                        <a href="#"><h5 class="card-title"><?php echo $product['description']; ?></h5></a>
+                        <p class="card-text text-muted"><?php echo $user_product['product_id']; ?></p>
+                        <p class="card-text text-muted"><?php echo $user_product['amount']; ?></p>
                         <div class="card-footer">
-                            <?php echo $product['price']; ?>
+
                         </div>
                     </div>
                 </a>
@@ -66,3 +63,4 @@
                 background-color: white;
             }
         </style>
+<?php

@@ -40,7 +40,7 @@ if (empty($errors)) {
 
             //успешный вход через куки
             //setcookie('user_id', $user['id']);
-            header("Location: /catalog.php");
+            header("Location: /catalog");
         } else {
             $errors['username'] = "Логин или пароль указаны неверно!";
         }

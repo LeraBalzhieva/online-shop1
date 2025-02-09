@@ -1,7 +1,9 @@
 <?php
+
 function validate(array $data): array
 {
     $errors = [];
+
 // объявление и валидация данных
     if (isset($data['name'])) {
         $name = $data['name'];
@@ -31,44 +33,46 @@ function validate(array $data): array
     } else {
         $errors['email'] = "Email должен быть заполнен";
     }
-// проверка совпадения паролей
-    if (isset($data['psw'])) {
-        $password = $data['psw'];
-        if (strlen($password) < 3) {
-            $errors['psw'] = "Пароль не может содержать меньше 3 символов";
-        }
-        $passwordRepeat = $data["psw-repeat"];
-        if ($password !== $passwordRepeat) {
-            $errors['psw-repeat'] = "Пароли не совпадают!";
-        }
-    } else {
-        $errors['psw'] = "Пароль должен быть заполнен!";
-    }
+
     return $errors;
 }
 
 $errors = validate($_POST);
 
-// внесение в БД, если нет ошибок
 if (empty($errors)) {
+    session_start();
     $name = $_POST['name'];
     $email = $_POST['mail'];
-    $password = $_POST['psw'];
-    $passwordRepeat = $_POST['psw-repeat'];
-    $photo = $_POST['photo'];
-    $password = password_hash($password, PASSWORD_DEFAULT);
 
-    $pdo = new PDO('pgsql:host=db; port=5432;dbname=mydb', 'user', 'pwd');
+    if (isset($_SESSION['userId'])) {
 
-//добавление пользователей
-    $stmt = $pdo->prepare("INSERT INTO users (name, email, password, image_url) VALUES (:name, :email, :password, :image_url)");
-    $stmt->execute([':name' => $name, ':email' => $email, ':password' => $password, 'image_url' => $photo]);
+        $userId = $_SESSION['userId'];
 
-    $stmt = $pdo->prepare("SELECT * FROM users WHERE email = :email");
-    $stmt->execute([':email' => $email]);
+        $pdo = new PDO('pgsql:host=db; port=5432;dbname=mydb', 'user', 'pwd');
+        $stmt = $pdo->query("SELECT * FROM users WHERE id = $userId");
+        $users = $stmt->fetch();
 
-    $result = $stmt->fetch();
-    print_r ($result);
+        if ($users['name'] !== $name) {
+            $pdo = new PDO('pgsql:host=db; port=5432;dbname=mydb', 'user', 'pwd');
+            $stmt = $pdo->prepare("UPDATE users SET name = :name WHERE id = $userId");
+            $stmt->execute([':name' => $name]);
+            echo "Новое имя: " . $name;
+        }
+
+        if ($users['email'] !== $email) {
+            $pdo = new PDO('pgsql:host=db; port=5432;dbname=mydb', 'user', 'pwd');
+            $stmt = $pdo->prepare("UPDATE users SET email = :email WHERE id = $userId");
+            $stmt->execute([':email' => $email]);
+            echo "Новый email: " . $email;
+        } else {
+            http_response_code(404);
+            require_once './404.php';
+        }
+    } else {
+        echo "NO";
+    }
 }
-require_once './registration_form.php';
 
+
+
+require_once './profile_form.php';

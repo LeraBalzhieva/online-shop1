@@ -1,0 +1,24 @@
+CREATE TABLE users (
+                          id SERIAL PRIMARY KEY,
+                          name varchar not null,
+                          email varchar not null,
+                          password varchar not null
+)
+
+
+
+
+ALTER TABLE users ADD UNIQUE (email);
+
+CREATE TABLE products (
+    id          SERIAL PRIMARY KEY,
+    name        varchar not null,
+    description varchar,
+    price       decimal not null
+)
+
+ALTER TABLE products ADD COLUMN image_url varchar;
+
+ALTER TABLE users ADD COLUMN image_url varchar;
+
+

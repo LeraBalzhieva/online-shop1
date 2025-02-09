@@ -1,7 +1,7 @@
 
 <div class="login-page"  >
   <div class="form">
-    <form class="login-form" action="handle_login.php" method="POST">
+    <form class="login-form" action="/login" method="POST">
       <input type="text" name="username" placeholder="username"/>
         <?php if (isset($errors['username'])):  ?>
             <label style="color: red"><?php echo $errors['username'];?></label>
