@@ -1,19 +1,31 @@
+<?php
 
-<form action="profile_change" method="POST" class="form-example">
+session_start();
+if (isset($_SESSION['userId'])) {
+    $userId = $_SESSION['userId'];
+
+    $pdo = new PDO('pgsql:host=db; port=5432;dbname=mydb', 'user', 'pwd');
+    $stmt = $pdo->query("SELECT * FROM users WHERE id = $userId");
+    $user = $stmt->fetch();
+} else {
+    header("Location: login.php");
+}?>
+
+<form action="editProfile" method="POST" class="form-example">
   <div class="form-example">
     <label for="name">Введите новое имя: </label>
       <?php if (isset($errors['name'])):  ?>
           <label style="color: red"><?php echo $errors['name'];?></label>
       <?php endif; ?>
 
-      <input type="text" name="name" id="name" required />
+      <input type="text" name="name" id="name" value="<?php echo $user['name']; ?>" />
   </div>
   <div class="form-example">
     <label for="email">Введите новый email: </label>
       <?php if (isset($errors['email'])):  ?>
           <label style="color: red"><?php echo $errors['email'];?></label>
       <?php endif; ?>
-    <input type="email" name="mail" id="email" required />
+    <input type="email" name="mail" id="email" value="<?php echo $user['email']; ?>" />
   </div>
   <div class="form-example">
     <input type="submit" value="Изменить" />

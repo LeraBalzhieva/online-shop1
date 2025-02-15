@@ -18,7 +18,7 @@
                         </header>
                     </div>
                     <div class="panel-body">
-                        <?php foreach ($users as $user): ?>
+
                         <div class="text-center" id="author">
                             <img src="<?php echo $user['image_url']; ?>">
                             <h3></h3>
@@ -31,7 +31,7 @@
                     <div class="panel-body">
 
                         <ul id="myTab" class="nav nav-pills">
-                            <li class="active"><a href="#detail" data-toggle="tab">О пользователе</a></li>
+                            <li class="active"><a href="/editProfile" >Изменить профиль</a></li>
 
                         </ul>
                         <div id="myTabContent" class="tab-content">
@@ -48,16 +48,12 @@
                                     </tbody>
                                 </table>
 
-
-
-                                <a href="/profile_change">Изменить профиль</a>
-                            </div>
+                           </div>
 
                         </div>
                     </div>
                 </div>
             </div>
-        </div><? endforeach; ?>
 
     </div><!-- /.main -->
 </div><!-- /.container -->

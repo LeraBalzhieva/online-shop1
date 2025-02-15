@@ -9,13 +9,13 @@
         <?php if (isset($errors['product_id'])):  ?>
             <label style="color: red"><?php echo $errors['product_id'];?></label>
         <?php endif; ?>
-        <input type="text" placeholder="Enter product id" name="product_id" id="product_id" required>
+        <input type="text" placeholder="Enter product id" name="product_id" id="product_id" >
 
         <label for="amount"><b>Amount</b></label>
         <?php if (isset($errors['amount'])):  ?>
             <label style="color: red"><?php echo $errors['amount'];?></label>
         <?php endif; ?>
-        <input type="text" placeholder="Enter amount" name="amount" id="amount" required>
+        <input type="text" placeholder="Enter amount" name="amount" id="amount" >
 
 
 
@@ -25,7 +25,7 @@
     </div>
 
     <div class="container signin">
-        <p>Already have an account? <a href="#">Sign in</a>.</p>
+
     </div>
 </form>
 
