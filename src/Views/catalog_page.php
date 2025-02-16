@@ -21,7 +21,7 @@
                 <div class="container">
                    <input type="hidden" placeholder="Enter product id" name="product_id" value="<?php echo $product['id'];  ?>" id=product_id">
 
-                    <label for="amount"><b>Введите количество:</b></label>
+                    <label for="amount"><b></b></label>
                     <?php if (isset($errors['amount'])):  ?>
                         <label style="color: red"><?php echo $errors['amount'];?></label>
                     <?php endif; ?>
