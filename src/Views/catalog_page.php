@@ -1,6 +1,7 @@
 <div class="container">
     <li class="active"><a href="/profile">Мой профиль</a></li>
     <li class="active"><a href="/cart">Корзина</a></li>
+    <li class="active"><a href="/logout">Выйти</a></li>
 
     <h3>Catalog</h3>
     <div class="card-deck">
@@ -8,12 +9,11 @@
             <div class="card text-center">
                     <img class="card-img-top" src="<?php echo $product['image_url']; ?>" alt="Card image">
                     <div class="card-body">
-                        <p class="card-text text-muted"><?php echo $product['name']; ?></p>
-                        <h5 class="card-title"><?php echo $product['description']; ?></h5></a>
-                        <div class="card-footer">
-                            <?php echo "Цена:"; ?>
-                            <?php echo $product['price'] . "р";  ?>
-                        </div>
+                        <h5 class="card-title"><?php echo $product['name']; ?></h5>
+                        <p class="card-title"><?php echo $product['description']; ?></p></a>
+                        <div class="card-footer"> <?php echo "Цена: " . $product['price'] . "р" ; ?>
+
+                         </div>
                     </div>
                 </a>
             </div>
@@ -36,7 +36,7 @@
                 </div>
                 </form>
 
-        <? endforeach; ?>
+        <?php    endforeach; ?>
 
 
         <style>

@@ -11,6 +11,7 @@ class UserController
     {
         require_once '../Views/login_form.php';
     }
+
     public function getProfile()
     {
         require_once '../Views/profile_page.php';
@@ -42,6 +43,7 @@ class UserController
         }
         require_once '../Views/registration_form.php';
     }
+
     // Валидация изера при регистрации
     private function validateByUser(array $data): array
     {
@@ -150,9 +152,10 @@ class UserController
 
             require_once '../Views/profile_page.php';
         } else {
-            header("Location: /login/login.php");
+            header("Location: ../login");
         }
     }
+
     //валиядация при изменении профиля
     private function validateProfile(array $data): array
     {
@@ -184,6 +187,7 @@ class UserController
         }
         return $errors;
     }
+
 // изменение данных на странице профиля
     public function editProfile()
     {
@@ -218,9 +222,16 @@ class UserController
             header('Location: /profile');
             exit;
         }
-
         require_once '../Views/edit_profile_form.php';
     }
 
+    public function logout()
+    {
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            session_start();
 
+            session_destroy();
+            header('Location: ../login');
+        }
+    }
 }

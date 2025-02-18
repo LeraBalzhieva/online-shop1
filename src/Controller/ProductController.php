@@ -1,6 +1,4 @@
 <?php
-
-
 class ProductController
 {
     public function getCatalog()
@@ -8,7 +6,7 @@ class ProductController
         require_once '../Views/catalog_page.php';
     }
 
-    public function addProductForm()
+    public function getAddProduct()
     {
         require_once '../Views/add_product_form.php';
     }
@@ -27,7 +25,7 @@ class ProductController
 
             require_once '../Views/catalog_page.php';
         } else {
-            header("Location: /login/login");
+            header("Location: ../login");
             exit();
         }
     }
@@ -42,6 +40,8 @@ class ProductController
             header('Location: ../login.php');
             exit;
         }
+        require_once '../Model/Product.php';
+
         $errors = $this->validateProduct($_POST);
         if (empty($errors)) {
 
@@ -49,7 +49,7 @@ class ProductController
             $productId = $_POST['product_id'];
             $amount = $_POST['amount'];
 
-            require_once '../Model/Product.php';
+
             $productModel = new Product();
             $product = $productModel->getByUserProducts($userId, $productId);
 
@@ -74,11 +74,9 @@ class ProductController
 
             require_once '../Model/Product.php';
             $productModel = new Product();
-            $data = $productModel->getByProduct($productId);
+            $product = $productModel->getByProduct($productId);
 
-
-
-            if ($data === false) {
+            if ($product === false) {
                 $errors['product_id'] = "Продукт не найден";
             }
             if ($productId < 1) {
@@ -88,18 +86,14 @@ class ProductController
             $errors['product_id'] = "Строка должна быть заполнена";
         }
 
-//        if (isset($data['amount'])) {
-//            $amount = (int)$data['amount'];
-//            if (($amount < 1) || ($amount) > 100) {
-//                $errors['amount'] = "Количество не может быть отрицательным и больше 100";
-//            }
-//        } else {
-//            $errors['amount'] = "Строка должна быть заполнена";
-//        }
+        if (isset($data['amount'])) {
+            $amount = (int)$data['amount'];
+            if (($amount < 1) || ($amount) > 100) {
+                $errors['amount'] = "Количество не может быть отрицательным и больше 100";
+            }
+        } else {
+            $errors['amount'] = "Строка должна быть заполнена";
+        }
         return $errors;
-
-
     }
-
-
 }

@@ -1,6 +1,10 @@
 <?php
 
-$requestUri = $_SERVER['REQUEST_URI'];
+require_once '../Core/App.php';
+$app = new App();
+$app->run();
+
+/*$requestUri = $_SERVER['REQUEST_URI'];
 $requestMethod = $_SERVER['REQUEST_METHOD'];
 
 // регистрация
@@ -29,7 +33,7 @@ if ($requestUri === '/registration') {
 
 // каталог
 } elseif ($requestUri === '/catalog') {
-    require_once '../Controller/Product.Controller.php';
+    require_once '../Controller/ProductController.php';
     $product = new ProductController();
     if ($requestMethod === 'CET') {
         $product->getCatalog();
@@ -65,7 +69,7 @@ if ($requestUri === '/registration') {
 
 
 } elseif ($requestUri === '/add-product') {
-    require_once '../Controller/Product.Controller.php';
+    require_once '../Controller/ProductController.php';
     $product = new ProductController();
     if ($requestMethod === 'GET') {
         $product->addProductForm();
@@ -88,4 +92,4 @@ if ($requestUri === '/registration') {
 } else {
     http_response_code(404);
     require_once './404.php';
-}
+}*/
