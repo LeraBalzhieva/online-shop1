@@ -1,4 +1,8 @@
 <?php
+namespace Controller;
+
+use Model\UserProduct;
+use Model\Product;
 
 class CartController
 {
@@ -16,7 +20,7 @@ class CartController
             header('Location: ../login');
             exit();
         } else {
-            require_once '../Model/UserProduct.php';
+            //require_once '../Model/UserProduct.php';
             $userId = $_SESSION['userId'];
             $cartModel = new UserProduct();
             $userProducts = $cartModel->getByUserProduct($userId);
@@ -26,7 +30,7 @@ class CartController
             foreach ($userProducts as $userProduct) {
                 $productId = $userProduct['product_id'];
 
-                require_once '../Model/Product.php';
+              //  require_once '../Model/Product.php';
                 $productModel = new Product();
                 $product = $productModel->getByProduct($productId);
 
@@ -39,8 +43,4 @@ class CartController
     }
 
 }
-
-
-?>
-
 

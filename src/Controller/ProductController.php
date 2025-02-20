@@ -1,4 +1,8 @@
 <?php
+
+namespace Controller;
+
+use Model\Product;
 class ProductController
 {
     public function getCatalog()
@@ -19,10 +23,9 @@ class ProductController
 
         if (isset($_SESSION['userId'])) {
 
-            require_once '../Model/Product.php';
+          //  require_once '../Model/Product.php';
             $productModel = new Product();
             $products = $productModel->getByCatalog($_SESSION['userId']);
-
             require_once '../Views/catalog_page.php';
         } else {
             header("Location: ../login");
@@ -40,7 +43,7 @@ class ProductController
             header('Location: ../login.php');
             exit;
         }
-        require_once '../Model/Product.php';
+        //require_once '../Model/Product.php';
 
         $errors = $this->validateProduct($_POST);
         if (empty($errors)) {
@@ -72,7 +75,7 @@ class ProductController
         if (isset($data['product_id'])) {
             $productId = (int)$data['product_id'];
 
-            require_once '../Model/Product.php';
+           // require_once '../Model/Product.php';
             $productModel = new Product();
             $product = $productModel->getByProduct($productId);
 

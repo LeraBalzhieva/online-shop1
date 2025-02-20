@@ -1,7 +1,8 @@
 
 <div class="container">
     <li class="active"><a href="/profile">Мой профиль</a></li>
-    <li class="active"><a href="catalog">Каталог</a></li>
+    <li class="active"><a href="/catalog">Каталог</a></li>
+    <li class="active"><a href="/order">К оформлению</a></li>
 
     <h3>CART</h3>
     <div class="card-deck">

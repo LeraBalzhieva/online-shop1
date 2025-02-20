@@ -1,5 +1,8 @@
 <?php
 
+namespace Controller;
+
+use Model\User;
 class UserController
 {
     public function getRegistrate()
@@ -36,7 +39,7 @@ class UserController
             $password = password_hash($password, PASSWORD_DEFAULT);
 
             //добавление данных и
-            require_once '../Model/User.php';
+            //require_once '../Model/User.php';
             $userModel = new User();
             $user = $userModel->addUser($name, $email, $password, $photo);
             $user = $userModel->getByEmail($email);
@@ -66,7 +69,7 @@ class UserController
                 $errors['email'] = "Некорректный email";
             } else {
 
-                require_once '../Model/User.php';
+                //require_once '../Model/User.php';
                 $userModel = new User();
                 $user = $userModel->getByEmail($email);
 
@@ -102,7 +105,7 @@ class UserController
             $password = $_POST['password'];
 
             //проверка уникальности пароля
-            require_once '../Model/User.php';
+            //require_once '../Model/User.php';
             $userModel = new User();
             $user = $userModel->getByEmail($username);
 
@@ -146,7 +149,7 @@ class UserController
 
         if (isset($_SESSION['userId'])) {
 
-            require_once '../Model/User.php';
+           // require_once '../Model/User.php';
             $userModel = new User();
             $user = $userModel->verification($_SESSION['userId']);
 
@@ -174,7 +177,7 @@ class UserController
             } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 $errors['email'] = "Некорректный email";
             } else {
-                require_once '../Model/User.php';
+              //  require_once '../Model/User.php';
                 $userModel = new User();
                 $user = $userModel->getByEmail($email);
 
@@ -207,7 +210,7 @@ class UserController
             $email = $_POST['mail'];
             $userId = $_SESSION['userId'];
 
-            require_once '../Model/User.php';
+            //require_once '../Model/User.php';
             $userModel = new User();
             $user = $userModel->verification($_SESSION['userId']);
 
