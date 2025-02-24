@@ -1,8 +1,10 @@
-
+<form action="/order" method="POST">
 <div class="row">
+
     <div class="col-75">
+
         <div class="container">
-            <form action="/order" method="POST">
+
                 <li class="active"><a href="/cart">Назад в корзину</a></li>
                 <div class="row">
                     <div class="col-50">
@@ -13,12 +15,6 @@
                         <?php endif; ?>
                         <input type="text" id="name" name="name">
 
-
-                        <label for="email"><i class="fa fa-envelope"></i> Email</label>
-                        <?php if (isset($errors['email'])):  ?>
-                            <label style="color: red"><?php echo $errors['email'];?></label>
-                        <?php endif; ?>
-                        <input type="text" id="email" name="mail">
 
                         <label for="phone"><i class="fa fa-envelope"></i> Phone</label>
                         <?php if (isset($errors['phone'])):  ?>
@@ -40,10 +36,17 @@
                         <?php endif; ?>
                         <input type="text" id="adr" name="address" >
 
+                        <label for="comment"><i class="fa fa-envelope"></i> comment</label>
+                        <?php if (isset($errors['comment'])):  ?>
+                            <label style="color: red"><?php echo $errors['comment'];?></label>
+                        <?php endif; ?>
+                        <input type="text" id="comment" name="comment">
+
+
                     </div>
 
                 </div>
-            </form>
+
         </div>
     </div>
 
@@ -76,10 +79,13 @@
                 --><?php /*endforeach; */?>
         </div>
     </div>
-    <input type="submit" value="Оформить заказ" class="btn">
+        <button type="submit" value="Оформить заказ" class="btn">Оформить заказ</button>
+
+
 </div>
 
 
+</form>
 <style>
 
     .row {

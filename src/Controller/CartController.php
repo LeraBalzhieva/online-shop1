@@ -6,6 +6,13 @@ use Model\Product;
 
 class CartController
 {
+    private UserProduct $cartModel;
+    private Product $productModel;
+    public function __construct()
+    {
+        $this->cartModel = new UserProduct();
+        $this->productModel = new Product();
+    }
     public function getCartPage()
     {
         require_once '../Views/cart_page.php';
@@ -20,19 +27,16 @@ class CartController
             header('Location: ../login');
             exit();
         } else {
-            //require_once '../Model/UserProduct.php';
+
             $userId = $_SESSION['userId'];
-            $cartModel = new UserProduct();
-            $userProducts = $cartModel->getByUserProduct($userId);
+            $userProducts = $this->cartModel->getAllByUserId($userId);
 
             $products = [];
 
             foreach ($userProducts as $userProduct) {
                 $productId = $userProduct['product_id'];
 
-              //  require_once '../Model/Product.php';
-                $productModel = new Product();
-                $product = $productModel->getByProduct($productId);
+                $product = $this->productModel->getByProduct($productId);
 
                 $product['amount'] = $userProduct['amount'];
                 $products[] = $product;

@@ -1,14 +1,27 @@
 <?php
 
-require_once './src/Model/Model.php';
+namespace Model;
+
+
 class Order extends Model
 {
-    public function addOrder(string $name, string $email, string $address, string $city, string $phone): array|false
+    public function addOrder(string $name,  string $address, string $city, string $phone, int $userId, string $comment)
     {
-        $stmt = $this->pdo->prepare("INSERT INTO users (name, email, address, city, phone) VALUES (:name, :email, :address, :city, :phone)");
-        $stmt->execute([':name' => $name, ':email' => $email, ':address' => $address, ':city' => $city, ':phone' => $phone]);
+        $stmt = $this->pdo->prepare(
+            "INSERT INTO orders (name, address, city, phone, user_id, comment)
+                    VALUES (:name, :address, :city, :phone, :user_id, :comment) RETURNING id"
+        );
+
+        $stmt->execute([
+            'name' => $name,
+            'address' => $address,
+            'city' => $city,
+            'phone' => $phone,
+            'user_id' => $userId,
+            'comment' => $comment
+        ]);
         $result = $stmt->fetch();
-        return $result;
+        return $result['id'];
     }
 
     public function getOrderId(): int|null

@@ -5,6 +5,12 @@ namespace Controller;
 use Model\User;
 class UserController
 {
+    private User $userModel;
+
+    public function __construct()
+    {
+        $this->userModel = new User();
+    }
     public function getRegistrate()
     {
         require_once '../Views/registration_form.php';
@@ -38,11 +44,8 @@ class UserController
             $photo = $_POST['photo'];
             $password = password_hash($password, PASSWORD_DEFAULT);
 
-            //добавление данных и
-            //require_once '../Model/User.php';
-            $userModel = new User();
-            $user = $userModel->addUser($name, $email, $password, $photo);
-            $user = $userModel->getByEmail($email);
+            $user = $this->userModel->addUser($name, $email, $password, $photo);
+            $user = $this->userModel->getByEmail($email);
         }
         require_once '../Views/registration_form.php';
     }
@@ -69,9 +72,8 @@ class UserController
                 $errors['email'] = "Некорректный email";
             } else {
 
-                //require_once '../Model/User.php';
-                $userModel = new User();
-                $user = $userModel->getByEmail($email);
+
+                $user = $this->userModel->getByEmail($email);
 
                 if ($user !== false) {
                     $errors['email'] = "Этот Email уже зарегестрирован!";
@@ -104,10 +106,7 @@ class UserController
             $username = $_POST['username'];
             $password = $_POST['password'];
 
-            //проверка уникальности пароля
-            //require_once '../Model/User.php';
-            $userModel = new User();
-            $user = $userModel->getByEmail($username);
+            $user = $this->userModel->getByEmail($username);
 
             if ($user === false) {
                 $errors['username'] = "Логин или пароль указаны неверно!";
@@ -149,11 +148,11 @@ class UserController
 
         if (isset($_SESSION['userId'])) {
 
-           // require_once '../Model/User.php';
-            $userModel = new User();
-            $user = $userModel->verification($_SESSION['userId']);
+
+            $user = $this->userModel->verification($_SESSION['userId']);
 
             require_once '../Views/profile_page.php';
+
         } else {
             header("Location: ../login");
         }
@@ -177,10 +176,8 @@ class UserController
             } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 $errors['email'] = "Некорректный email";
             } else {
-              //  require_once '../Model/User.php';
-                $userModel = new User();
-                $user = $userModel->getByEmail($email);
 
+                $user = $this->userModel->getByEmail($email);
 
                 $userId = $_SESSION['userId'];
                 if ($user['id'] !== $userId) {
@@ -210,17 +207,15 @@ class UserController
             $email = $_POST['mail'];
             $userId = $_SESSION['userId'];
 
-            //require_once '../Model/User.php';
-            $userModel = new User();
-            $user = $userModel->verification($_SESSION['userId']);
+            $user = $this->userModel->verification($_SESSION['userId']);
 
             if ($user['name'] !== $name) {
-                $userModel->updateNamedByID($name, $userId);
+                $this->userModel->updateNamedByID($name, $userId);
             }
 
             if ($user['email'] !== $email) {
 
-                $userModel->updateEmailByID($email, $userId);
+                $this->userModel->updateEmailByID($email, $userId);
             }
             header('Location: /profile');
             exit;

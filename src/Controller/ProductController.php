@@ -3,8 +3,19 @@
 namespace Controller;
 
 use Model\Product;
+use Model\UserProduct;
+
 class ProductController
 {
+    private Product $productModel;
+    private UserProduct $userProductModel;
+
+    public function __construct()
+    {
+        $this->productModel = new Product();
+        $this->userProductModel = new UserProduct();
+    }
+
     public function getCatalog()
     {
         require_once '../Views/catalog_page.php';
@@ -23,9 +34,7 @@ class ProductController
 
         if (isset($_SESSION['userId'])) {
 
-          //  require_once '../Model/Product.php';
-            $productModel = new Product();
-            $products = $productModel->getByCatalog($_SESSION['userId']);
+            $products = $this->productModel->getByCatalog($_SESSION['userId']);
             require_once '../Views/catalog_page.php';
         } else {
             header("Location: ../login");
@@ -43,7 +52,6 @@ class ProductController
             header('Location: ../login.php');
             exit;
         }
-        //require_once '../Model/Product.php';
 
         $errors = $this->validateProduct($_POST);
         if (empty($errors)) {
@@ -52,16 +60,14 @@ class ProductController
             $productId = $_POST['product_id'];
             $amount = $_POST['amount'];
 
-
-            $productModel = new Product();
-            $product = $productModel->getByUserProducts($userId, $productId);
+            $product = $this->userProductModel->getByUserProducts($userId, $productId);
 
             if ($product === false) {
-                $productModel->addUserProduct($userId, $productId, $amount);
+                $this->userProductModel->addUserProduct($userId, $productId, $amount);
 
             } else {
                 $amount = $amount + $product['amount'];
-                $productModel->updateUserProduct($userId, $productId, $amount);
+                $this->userProductModel->updateUserProduct($userId, $productId, $amount);
             }
         }
         header("Location: /catalog");
@@ -75,9 +81,7 @@ class ProductController
         if (isset($data['product_id'])) {
             $productId = (int)$data['product_id'];
 
-           // require_once '../Model/Product.php';
-            $productModel = new Product();
-            $product = $productModel->getByProduct($productId);
+            $product = $this->productModel->getByProduct($productId);
 
             if ($product === false) {
                 $errors['product_id'] = "Продукт не найден";

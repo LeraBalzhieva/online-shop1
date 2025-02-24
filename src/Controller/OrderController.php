@@ -1,9 +1,18 @@
 <?php
 namespace Controller;
-
+use Model\OrderProduct;
+use Model\Order;
+use Model\UserProduct;
 
 class OrderController
 {
+    private Order $orderModel;
+    private UserProduct $userProductModel;
+    public function __construct()
+    {
+        $this->orderModel = new Order();
+        $this->userProductModel = new UserProduct();
+    }
     public function getOrder()
     {
         require_once '../Views/order_page.php';
@@ -15,15 +24,9 @@ class OrderController
             session_start();
         }
 
-        if (isset($_SESSION['userId'])) {
-
-            require_once '../Model/User.php';
-            $userModel = new User();
-            $user = $userModel->verification($_SESSION['userId']);
-
-            require_once '../Views/order_page.php';
-        } else {
+        if (!isset($_SESSION['userId'])) {
             header("Location: ../login");
+            exit();
         }
 
         $errors = $this->validateByOrder($_POST);
@@ -31,23 +34,29 @@ class OrderController
         if (empty($errors)) {
             $userId = $_SESSION['userId'];
             $name = $_POST['name'];
-            $email = $_POST['mail'];
             $phone = $_POST['phone'];
             $city = $_POST['city'];
             $address = $_POST['address'];
+            $comment = $_POST['comment'];
 
-            //добавление данных и
-            require_once '../Model/Order.php';
-            $orderModel = new Order();
-            $order = $orderModel->addOrder($name, $email, $phone, $city, $address);
+            $orderId = $this->orderModel->addOrder($name, $phone, $city, $address, $userId, $comment);
 
-            $cartModel = new UserProduct();
-            $cartProducts = $cartModel->getByUserProduct($userId);
-            header("Location: ../order");
+            $userProducts = $this->userProductModel->getAllByUserId($userId);
+
+            $orderProduct = new OrderProduct();
+            foreach ($userProducts as $userProduct) {
+
+                $productId = $userProduct['product_id'];
+                $amount = $userProduct['amount'];
+                $orderProduct->create($orderId, $productId, $amount);
+            }
+
+            $this->userProductModel->deleteByUserId($userId);
+
+        } else {
+            require_once '../Views/order_page.php';
         }
-        require_once '../Views/order_page.php';
     }
-
     private function validateByOrder(array $data): array
     {
         $errors = [];
@@ -61,20 +70,10 @@ class OrderController
             $errors['name'] = "Имя должно быть заполнено";
         }
 
-        if (isset($data['mail'])) {
-            $email = $data['mail'];
-            if (strlen($email) < 3) {
-                $errors['email'] = "Email не может содержать меньше 3 символов";
-            } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                $errors['email'] = "Некорректный email";
-            }
-        } else {
-            $errors['email'] = "Email должен быть заполнен";
-        }
 
         if (isset($data['phone'])) {
             $phone = $data['phone'];
-            if (strlen($phone) < 12) {
+            if (strlen($phone < 5)) {
                 $errors['phone'] = "Введите корректный номер телефона";
             }
         } else {

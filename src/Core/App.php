@@ -12,90 +12,90 @@ class App
     private array $routes = [
         '/registration' => [
             'GET' => [
-                'class' => 'Controller\UserController',
+                'class' => UserController:: class,
                 'method' => 'getRegistrate',
             ],
             'POST' => [
-                'class' => 'Controller\UserController',
+                'class' => UserController:: class,
                 'method' => 'registrate',
             ],
         ],
         '/login' => [
             'GET' => [
-                'class' => 'Controller\UserController',
+                'class' => UserController:: class,
                 'method' => 'getLogin',
             ],
             'POST' => [
-                'class' => 'Controller\UserController',
+                'class' => UserController:: class,
                 'method' => 'login',
             ],
         ],
         '/catalog' => [
             'GET' => [
-                'class' => 'Controller\ProductController',
+                'class' => ProductController:: class,
                 'method' => 'Catalog',
 
             ],
             'POST' => [
-                'class' => 'Controller\ProductController',
+                'class' => ProductController:: class,
                 'method' => 'getCatalog',
 
             ],
         ],
         '/profile' => [
             'GET' => [
-                'class' => 'Controller\UserController',
+                'class' => UserController:: class,
                 'method' => 'profile',
             ],
             'POST' => [
-                'class' => 'Controller\UserController',
+                'class' => UserController:: class,
                 'method' => 'getProfile',
 
             ],
         ],
         '/editProfile' => [
             'GET' => [
-                'class' => 'Controller\UserController',
+                'class' => UserController:: class,
                 'method' => 'getEditProfile',
             ],
             'POST' => [
-                'class' => 'Controller\UserController',
+                'class' => UserController:: class,
                 'method' => 'editProfile',
             ],
         ],
         '/add-product' => [
             'GET' => [
-                'class' => 'Controller\ProductController',
+                'class' => ProductController:: class,
                 'method' => 'getAddProduct',
             ],
             'POST' => [
-                'class' => 'Controller\ProductController',
+                'class' => ProductController:: class,
                 'method' => 'addProduct',
             ],
         ],
         '/cart' => [
             'GET' => [
-                'class' => 'Controller\CartController',
+                'class' => CartController:: class,
                 'method' => 'getCart',
             ],
             'POST' => [
-                'class' => 'Controller\CartController',
+                'class' => CartController:: class,
                 'method' => 'getCartPage',
             ]
         ],
         '/logout' => [
             'GET' => [
-                'class' => 'Controller\UserController',
+                'class' => UserController:: class,
                 'method' => 'logout',
             ],
         ],
         '/order' => [
             'GET' => [
-                'class' => 'Controller\OrderController',
+                'class' => OrderController:: class,
                 'method' => 'getOrder',
             ],
             'POST' => [
-                'class' => 'Controller\OrderController',
+                'class' => OrderController:: class,
                 'method' => 'order',
             ]
         ],
