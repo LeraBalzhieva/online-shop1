@@ -1,44 +1,44 @@
 <form action="/order" method="POST">
-<div class="row">
+    <div class="row">
 
-    <div class="col-75">
+        <div class="col-75">
 
-        <div class="container">
+            <div class="container">
 
                 <li class="active"><a href="/cart">Назад в корзину</a></li>
                 <div class="row">
                     <div class="col-50">
                         <h3>Введите данные:</h3>
                         <label for="name"><i class="fa fa-user"></i> ФИО</label>
-                        <?php if (isset($errors['name'])):  ?>
-                            <label style="color: red"><?php echo $errors['name'];?></label>
+                        <?php if (isset($errors['name'])): ?>
+                            <label style="color: red"><?php echo $errors['name']; ?></label>
                         <?php endif; ?>
                         <input type="text" id="name" name="name">
 
 
                         <label for="phone"><i class="fa fa-envelope"></i> Phone</label>
-                        <?php if (isset($errors['phone'])):  ?>
-                            <label style="color: red"><?php echo $errors['phone'];?></label>
+                        <?php if (isset($errors['phone'])): ?>
+                            <label style="color: red"><?php echo $errors['phone']; ?></label>
                         <?php endif; ?>
-                        <input type="text" id="email" name="phone">
+                        <input type="text" id="phone" name="phone">
 
 
                         <label for="city"><i class="fa fa-institution"></i> Город</label>
-                        <?php if (isset($errors['city'])):  ?>
-                            <label style="color: red"><?php echo $errors['city'];?></label>
+                        <?php if (isset($errors['city'])): ?>
+                            <label style="color: red"><?php echo $errors['city']; ?></label>
                         <?php endif; ?>
                         <input type="text" id="city" name="city">
 
 
                         <label for="adr"><i class="fa fa-address-card-o"></i> Адрес</label>
-                        <?php if (isset($errors['address'])):  ?>
-                            <label style="color: red"><?php echo $errors['address'];?></label>
+                        <?php if (isset($errors['address'])): ?>
+                            <label style="color: red"><?php echo $errors['address']; ?></label>
                         <?php endif; ?>
-                        <input type="text" id="adr" name="address" >
+                        <input type="text" id="adr" name="address">
 
                         <label for="comment"><i class="fa fa-envelope"></i> comment</label>
-                        <?php if (isset($errors['comment'])):  ?>
-                            <label style="color: red"><?php echo $errors['comment'];?></label>
+                        <?php if (isset($errors['comment'])): ?>
+                            <label style="color: red"><?php echo $errors['comment']; ?></label>
                         <?php endif; ?>
                         <input type="text" id="comment" name="comment">
 
@@ -47,42 +47,46 @@
 
                 </div>
 
+            </div>
         </div>
-    </div>
 
-    <div class="col-25">
-        <div class="container">
-            <h4>Ваш заказ:
-                <span class="price" style="color:black">
+        <div class="col-25">
+            <div class="container">
+                <h4>Ваш заказ:
+                    <span class="price" style="color:black">
           <i class="fa fa-shopping-cart"></i>
 
         </span>
-            </h4>
-            <div class="card-deck">
-               <!-- <?php /*foreach ($products as $product): */?>
-                    <div class="card text-center">
-                        <div class="card-body">
-                            <p class="card-text"><?php /*echo $product['name']; */?></p>
-                            <div class="card-text">
-                                <?php /*echo "Цена:" . $product['price'] . "р"; */?> <br>
-                                <?php /*echo "Количество: " . $product['amount'] . "шт"; */?> <br>
-                                <hr>
-                                <h5 class="card-title"> <?php /*echo "Итого:" . $product['amount'] * $product['price'] . "p"; */?></h5>
+                </h4>
+                <div class="card-deck">
+                    <?php foreach ($products as $product): ?>
+                        <div class="card text-center">
+                            <img class="card-img-top" src="<?php echo $product['image_url']; ?>" alt="Card image">
+                            <div class="card-body">
+                                <p class="card-text"><?php echo $product['name']; ?></p>
+                                <div class="card-text">
+                                    <?php echo "Цена:" . $product['price'] . "р"; ?> <br>
+                                    <?php echo "Количество: " . $product['amount'] . "шт"; ?> <br>
+                                    <h5 class="card-title"> <?php echo "Итого:" . $product['amount'] * $product['price'] . "p"; ?></h5>
+
+
+                                </div>
                             </div>
+                            <hr>
+
+                            </a>
                         </div>
 
 
-                        </a>
-                    </div>
+                    <?php endforeach; ?>
+                    <h3 class="card-title"> <?php echo "ОБЩИЙ ИТОГ:" . $total . "p"; ?></h3>
+
+                </div>
+            </div>
+            <button type="submit" value="Оформить заказ" class="btn">Оформить заказ</button>
 
 
-                --><?php /*endforeach; */?>
         </div>
-    </div>
-        <button type="submit" value="Оформить заказ" class="btn">Оформить заказ</button>
-
-
-</div>
 
 
 </form>
@@ -169,6 +173,7 @@
         .row {
             flex-direction: column-reverse;
         }
+
         .col-25 {
             margin-bottom: 20px;
         }

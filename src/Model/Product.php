@@ -8,6 +8,8 @@ class Product extends Model
     {
         $stmt = $this->pdo->query('SELECT * FROM products');
         $result = $stmt->fetchAll();
+
+
         return $result;
     }
 

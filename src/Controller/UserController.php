@@ -111,12 +111,12 @@ class UserController
             if ($user === false) {
                 $errors['username'] = "Логин или пароль указаны неверно!";
             } else {
-                $passwordDB = $user['password'];
+                $passwordDB = $user->getPassword();
 
                 if (password_verify($password, $passwordDB)) {
                     //успешный вход через сессии
                     session_start();
-                    $_SESSION['userId'] = $user['id'];
+                    $_SESSION['userId'] = $user->getId();
                     header("Location: /catalog");
                 } else {
                     $errors['username'] = "Логин или пароль указаны неверно!";

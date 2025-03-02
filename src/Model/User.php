@@ -2,12 +2,28 @@
 namespace Model;
 class User extends Model
 {
-    public function getByEmail(string $email): array|false
+    private int $id;
+    private string $name;
+    private string $email;
+    private string $password;
+
+    public function getByEmail(string $email): self|null
     {
         $stmt = $this->pdo->prepare("SELECT * FROM users WHERE email = :email");
         $stmt->execute([':email' => $email]);
         $result = $stmt->fetch();
-        return $result;
+
+        if ($result === false) {
+            return null;
+        }
+
+        $obj = new self();
+        $obj->id = $result["id"];
+        $obj->name = $result["name"];
+        $obj->email = $result["email"];
+        $obj->password = $result["password"];
+
+        return $obj;
     }
 
     public function updateEmailByID(string $email, int $userId)
@@ -38,6 +54,28 @@ class User extends Model
         $result = $stmt->fetch();
         return $result;
     }
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function getEmail(): string
+    {
+        return $this->email;
+    }
+
+    public function getPassword(): string
+    {
+        return $this->password;
+    }
+
+
 
 
 }

@@ -26,7 +26,7 @@ class ProductController
         require_once '../Views/add_product_form.php';
     }
 
-    public function Catalog()
+    public function catalog()
     {
         if (session_status() !== PHP_SESSION_ACTIVE) {
             session_start();

@@ -1,6 +1,8 @@
 <div class="container">
     <li class="active"><a href="/profile">Мой профиль</a></li>
     <li class="active"><a href="/cart">Корзина</a></li>
+    <li class="active"><a href="/orderProduct">Мои заказы</a></li>
+
     <li class="active"><a href="/logout">Выйти</a></li>
 
     <h3>Catalog</h3>

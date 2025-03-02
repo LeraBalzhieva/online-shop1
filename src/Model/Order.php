@@ -11,7 +11,6 @@ class Order extends Model
             "INSERT INTO orders (name, address, city, phone, user_id, comment)
                     VALUES (:name, :address, :city, :phone, :user_id, :comment) RETURNING id"
         );
-
         $stmt->execute([
             'name' => $name,
             'address' => $address,
@@ -24,9 +23,11 @@ class Order extends Model
         return $result['id'];
     }
 
-    public function getOrderId(): int|null
+    public function getAllByUserId(int $userId): array
     {
-        return $this->pdo->lastInsertId();
+        $stmt = $this->pdo->prepare('SELECT * FROM orders WHERE user_id = :userId');
+        $stmt->execute(['userId' => $userId]);
+        return $stmt->fetchAll();
     }
 
 }
