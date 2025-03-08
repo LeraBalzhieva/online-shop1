@@ -59,24 +59,22 @@
         </span>
                 </h4>
                 <div class="card-deck">
-                    <?php foreach ($products as $product): ?>
+                    <?php foreach ($userProducts as $userProduct): ?>
                         <div class="card text-center">
-                            <img class="card-img-top" src="<?php echo $product['image_url']; ?>" alt="Card image">
-                            <div class="card-body">
-                                <p class="card-text"><?php echo $product['name']; ?></p>
-                                <div class="card-text">
-                                    <?php echo "Цена:" . $product['price'] . "р"; ?> <br>
-                                    <?php echo "Количество: " . $product['amount'] . "шт"; ?> <br>
-                                    <h5 class="card-title"> <?php echo "Итого:" . $product['amount'] * $product['price'] . "p"; ?></h5>
 
+                            <pre></pre>
+                            <img class="card-img-top" src="<?php echo $userProduct->getProduct()->getImage(); ?>" alt="Card image">
+                            <div class="card-body">
+
+                                <p class="card-text"><?php echo $userProduct->getPRoduct()->getName(); ?></p>
+                                <p class="card-text">Количество: <?php echo $userProduct->getAmount(); ?></p></a>
+                                <p class="card-text">Цена:<?php echo $userProduct->getProduct()->getPrice() . " р"; ?> </p>
 
                                 </div>
                             </div>
                             <hr>
-
                             </a>
                         </div>
-
 
                     <?php endforeach; ?>
                     <h3 class="card-title"> <?php echo "ОБЩИЙ ИТОГ:" . $total . "p"; ?></h3>

@@ -20,7 +20,7 @@
                     <div class="panel-body">
 
                         <div class="text-center" id="author">
-                            <img src="<?php echo $user['image_url']; ?>">
+                            <img src="<?php echo $user->getImage(); ?>">
                             <h3></h3>
                         </div>
                     </div>
@@ -40,8 +40,8 @@
 
                                 <table class="table table-th-block">
                                     <tbody>
-                                    <tr><td class="active">Имя: </td><td> <?php echo $user['name']; ?> </td></tr>
-                                    <tr><td class="active">Email:</td><td> <?php echo $user['email']; ?> </td></tr>
+                                    <tr><td class="active">Имя: </td><td> <?php echo $user->getName(); ?> </td></tr>
+                                    <tr><td class="active">Email:</td><td> <?php echo $user->getEmail(); ?> </td></tr>
                                     <tr><td class="active">Страна:</td><td>Россия</td></tr>
 
                                     <td class="panel"> <a href="/catalog">Назад в каталог</a></td>

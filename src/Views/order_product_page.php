@@ -5,39 +5,33 @@
 
     <h3>Ваш заказ:</h3>
     <div>
-        <?php foreach ($newUserOrders as $newUserOrder): ?>
+        <?php foreach ($userOrders as $newUserOrder): ?>
             <div class="card text-center">
 
                 <div class="card-body">
-                    <h1>Заказ номер: <?php echo $newUserOrder['id']?></h1>
-                    <p class="card-text">Имя: <?php echo $newUserOrder['name']; ?></p>
-                    <p class="card-text">Номер телефона: <?php echo $newUserOrder['phone']; ?></p>
-                    <p class="card-text">Город: <?php echo $newUserOrder['city']; ?></p>
-                    <p class="card-text">Адрес: <?php echo $newUserOrder['address']; ?></p>
-                    <p class="card-text">Комметарии: <?php echo $newUserOrder['comment']; ?></p>
-
-
+                    <h2>Заказ номер: <?php echo $newUserOrder->getId()?></h2>
+                    <p class="card-text">Имя: <?php echo $newUserOrder->getName(); ?></p>
+                    <p class="card-text">Номер телефона: <?php echo $newUserOrder->getPhone(); ?></p>
+                    <p class="card-text">Город: <?php echo $newUserOrder->getCity(); ?></p>
+                    <p class="card-text">Адрес: <?php echo $newUserOrder->getAddress(); ?></p>
+                    <p class="card-text">Комметарии: <?php echo $newUserOrder->getComment(); ?></p>
 
                     <div class="card-text">
 
                         <h3>Ваш заказ: </h3>
-               <?php foreach ($newUserOrder['products'] as $product): ?>
+               <?php foreach ($newOrderProducts as $newOrderProduct): ?>
 
-                        <p class="card-text"><?php echo $product['name']; ?></p>
-                        <p class="card-text"><?php echo $product['price']; ?></p>
-                        <p class="card-text"><?php echo $product['total']; ?></p>
-
+                        <p class="card-text"><?php echo $newOrderProduct->getProduct()->getName(); ?></p>
+                        <p class="card-text">Цена: <?php echo $newOrderProduct->getProduct()->getPrice(); ?> р</p>
+                        <p class="card-text">Количество: <?php echo $newOrderProduct->getAmount(); ?> шт</p>
 
                     </div>
                     <?php endforeach; ?>
                 </div>
-
-
                 <hr>
-
                 </a>
             </div>
-            <p class="card-text"><h3>Общая сумма заказа: <?php echo $userOrder['total']; ?></h3></p>
+          <p class="card-text"><h3>Общая сумма заказа: <?php echo $totalSum; ?> р</h3></p>
 
         <?php endforeach; ?>
 

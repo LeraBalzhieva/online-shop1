@@ -14,33 +14,37 @@ Autoloader::register($path);
 
 $app = new App();
 
-$app->addRoute('/registration', 'GET', UserController:: class, 'getRegistrate');
-$app->addRoute('/registration', 'POST', UserController::class, 'registrate');
+$app->get('/registration', UserController:: class, 'getRegistrate');
+$app->post('/registration', UserController::class, 'registrate');
 
-$app->addRoute('/login', 'GET', UserController:: class, 'getLogin');
-$app->addRoute('/login', 'POST', UserController::class, 'login');
+$app->get('/login', UserController:: class, 'getLogin');
+$app->post('/login', UserController::class, 'login');
 
-$app->addRoute('/profile', 'GET', UserController:: class, 'profile');
-$app->addRoute('/profile', 'POST', UserController::class, 'getProfile');
+$app->get('/profile', UserController:: class, 'profile');
+$app->post('/profile', UserController::class, 'getProfile');
 
-$app->addRoute('/editProfile', 'GET', UserController:: class, 'getEditProfile');
-$app->addRoute('/editProfile', 'POST', UserController::class, 'editProfile');
+$app->get('/editProfile', UserController:: class, 'getEditProfile');
+$app->post('/editProfile', UserController::class, 'editProfile');
 
-$app->addRoute('/logout', 'GET', UserController:: class, 'logout');
+$app->get('/logout', UserController:: class, 'logout');
 
-$app->addRoute('/catalog', 'GET', ProductController:: class, 'catalog');
-$app->addRoute('/catalog', 'POST', ProductController::class, 'getCatalog');
+$app->get('/catalog', ProductController:: class, 'catalog');
+$app->post('/catalog', ProductController::class, 'getCatalog');
 
-$app->addRoute('/add-product', 'GET', ProductController:: class, 'getAddProduct');
-$app->addRoute('/add-product', 'POST', ProductController::class, 'addProduct');
+$app->get('/add-product', ProductController:: class, 'getAddProduct');
+$app->post('/add-product', ProductController::class, 'addProduct');
+$app->post('/decrease-product', ProductController::class, 'addProduct');
 
-$app->addRoute('/cart', 'GET', CartController:: class, 'getCart');
-$app->addRoute('/cart', 'POST', CartController::class, 'getCartPage');
 
-$app->addRoute('/order', 'GET', OrderController:: class, 'getOrderProduct');
-$app->addRoute('/order', 'POST', OrderController::class, 'order');
+$app->get('/cart', CartController:: class, 'getCart');
+$app->post('/cart', CartController::class, 'getCartPage');
 
-$app->addRoute('/orderProduct', 'GET', OrderController:: class, 'getAllOrders');
+$app->get('/order',OrderController:: class, 'getOrderProduct');
+$app->post('/order',OrderController::class, 'order');
+
+$app->get('/orderProduct', OrderController:: class, 'getAllOrders');
+
+
 
 $app->run();
 

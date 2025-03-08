@@ -66,13 +66,42 @@ class ProductController
                 $this->userProductModel->addUserProduct($userId, $productId, $amount);
 
             } else {
-                $amount = $amount + $product['amount'];
+                $amount = $amount + $product->getAmount();
                 $this->userProductModel->updateUserProduct($userId, $productId, $amount);
             }
         }
         header("Location: /catalog");
         exit();
     }
+
+    public function decreaseProduct()
+    {
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            session_start();
+        }
+
+        if (!isset($_SESSION['userId'])) {
+            header('Location: ../login.php');
+            exit;
+        }
+        $userId = $_SESSION['userId'];
+        $productId = $_POST['product_id'];
+        $amount = $_POST['amount'];
+
+        $product = $this->userProductModel->getByUserProducts($userId, $productId);
+
+        if ($product !== false) {
+            if ($amount > 1) {
+                $newAmount = $amount - 1;
+                $this->userProductModel->updateUserProduct($userId, $productId, $newAmount);
+            } else {
+                $this->userProductModel->deleteUserProduct($userId, $productId);
+            }
+        }
+        header("Location: /catalog");
+        exit();
+    }
+
 
     private function validateProduct(array $data): array
     {

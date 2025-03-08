@@ -6,23 +6,27 @@ class User extends Model
     private string $name;
     private string $email;
     private string $password;
+    private string $image;
 
     public function getByEmail(string $email): self|null
     {
         $stmt = $this->pdo->prepare("SELECT * FROM users WHERE email = :email");
         $stmt->execute([':email' => $email]);
         $result = $stmt->fetch();
+        return $this->hydrate($result);
 
+    }
+    private function hydrate($result): self|null
+    {
         if ($result === false) {
             return null;
         }
-
         $obj = new self();
         $obj->id = $result["id"];
         $obj->name = $result["name"];
         $obj->email = $result["email"];
         $obj->password = $result["password"];
-
+        $obj->image = $result["image_url"];
         return $obj;
     }
 
@@ -52,7 +56,8 @@ class User extends Model
     {
         $stmt = $this->pdo->query('SELECT * FROM users WHERE id = ' . $_SESSION['userId']);
         $result = $stmt->fetch();
-        return $result;
+
+        return $this->hydrate($result);
     }
 
     public function getId(): int
@@ -73,6 +78,11 @@ class User extends Model
     public function getPassword(): string
     {
         return $this->password;
+    }
+
+    public function getImage(): string
+    {
+        return $this->image;
     }
 
 

@@ -180,7 +180,7 @@ class UserController
                 $user = $this->userModel->getByEmail($email);
 
                 $userId = $_SESSION['userId'];
-                if ($user['id'] !== $userId) {
+                if ($user->getId() !== $userId) {
                     $errors['email'] = "Этот Email уже зарегестрирован!";
                 }
             }
@@ -209,11 +209,11 @@ class UserController
 
             $user = $this->userModel->verification($_SESSION['userId']);
 
-            if ($user['name'] !== $name) {
+            if ($user->getName() !== $name) {
                 $this->userModel->updateNamedByID($name, $userId);
             }
 
-            if ($user['email'] !== $email) {
+            if ($user->getEmail() !== $email) {
 
                 $this->userModel->updateEmailByID($email, $userId);
             }

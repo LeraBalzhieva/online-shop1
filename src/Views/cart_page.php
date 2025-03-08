@@ -6,17 +6,18 @@
 
     <h3>CART</h3>
     <div class="card-deck">
-        <?php foreach ($products as $product): ?>
-            <div class="card text-center">
-                <img class="card-img-top" src="<?php echo $product['image_url']; ?>" alt="Card image">
+        <?php foreach ($userProducts as $userProduct): ?>
+            <div class="card text">
+                <img class="card-img-top" src="<?php echo $userProduct->getProduct()->getImage(); ?>" alt="Card image">
                 <div class="card-body">
-                    <p class="card-text"><?php echo $product['name']; ?></p>
-                    <p class="card-text"><?php echo $product['description']; ?></p></a>
-                    <div class="card-text">
-                        <?php echo "Цена:" . $product['price'] . "р"; ?> <br>
-                        <?php echo "Количество: " . $product['amount'] . "шт"; ?> <br>
-                        <h5 class="card-title"> <?php echo "Итого:" . $product['amount'] * $product['price'] . "p"; ?></h5>
-                    </div>
+
+                    <p class="card-text"><?php echo $userProduct->getProduct()->getName(); ?></p>
+                    <p class="card-text">Количество: <?php echo $userProduct->getAmount(); ?></p></a>
+                    <p class="card-text">Цена:<?php echo $userProduct->getProduct()->getPrice() . " р"; ?> </p>
+                    <p class="card-text">Итого:<?php echo $totalSum . " p"; ?> <br></p>
+
+
+                </div>
                 </div>
                 <hr>
 

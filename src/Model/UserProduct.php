@@ -4,12 +4,23 @@ namespace Model;
 
 class UserProduct extends Model
 {
+    private int $id;
+    private int $userId;
+    private int $productId;
+    private float $amount;
+    private Product $product;
+
     public function getAllByUserId(int $userId): array
     {
         $stmt = $this->pdo->prepare("SELECT * FROM user_products WHERE user_id = :userId");
         $stmt->execute([':userId' => $userId]);
         $result = $stmt->fetchAll();
-        return $result;
+
+        $results = [];
+        foreach ($result as $product) {
+            $results[] = $this->hydrate($product);
+        }
+        return $results;
     }
 
     public function deleteByUserId(int $userId)
@@ -19,12 +30,15 @@ class UserProduct extends Model
 
     }
 
-    public function getByUserProducts(int $userId, int $productId)
+    public function getByUserProducts(int $userId, int $productId): UserProduct|false
     {
         $stmt = $this->pdo->prepare("SELECT * FROM user_products WHERE user_id = :user_id AND product_id = :productId");
         $stmt->execute([':user_id' => $userId, ':productId' => $productId]);
         $result = $stmt->fetch();
-        return $result;
+        if ($result) {
+            return $this->hydrate($result);
+        }
+        return false;
     }
 
     public function addUserProduct(int $userId, int $productId, int $amount)
@@ -38,5 +52,67 @@ class UserProduct extends Model
         $stmt = $this->pdo->prepare("UPDATE user_products SET amount = :amount WHERE user_id = :userId AND product_id = :productId");
         $stmt->execute([':amount' => $amount, ':userId' => $userId, ':productId' => $productId]);
     }
+
+    public function deleteUserProduct(int $userId, int $productId)
+    {
+        $stmt  = $this->pdo->prepare("DELETE FROM user_products WHERE user_id = :user_id AND product_id = :productId");
+        $stmt->execute([':user_id' => $userId, ':productId' => $productId]);
+    }
+
+    public function hydrate(array $result): self|false
+    {
+        if (!$result) {
+            return false;
+        }
+        $obj = new self();
+        $obj->id = $result['id'];
+        $obj->userId = $result['user_id'];
+        $obj->productId = $result['product_id'];
+        $obj->amount = $result['amount'];
+
+        return $obj;
+    }
+
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    public function getUserId(): int
+    {
+        return $this->userId;
+    }
+
+
+    public function getProductId():int
+    {
+        return $this->productId;
+    }
+
+
+    public function getAmount(): int
+    {
+        return $this->amount;
+    }
+
+    public function getProduct(): Product
+    {
+        return $this->product;
+    }
+
+    public function setProduct(Product $product): void
+    {
+        $this->product = $product;
+    }
+
+
+
+
+
+
+
+
+
 
 }

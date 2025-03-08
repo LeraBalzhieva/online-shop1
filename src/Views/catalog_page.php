@@ -9,11 +9,11 @@
     <div class="card-deck">
         <?php foreach ($products as $product): ?>
             <div class="card text-center">
-                    <img class="card-img-top" src="<?php echo $product['image_url']; ?>" alt="Card image">
+                    <img class="card-img-top" src="<?php echo $product->getImage(); ?>" alt="Card image">
                     <div class="card-body">
-                        <h5 class="card-title"><?php echo $product['name']; ?></h5>
-                        <p class="card-title"><?php echo $product['description']; ?></p></a>
-                        <div class="card-footer"> <?php echo "Цена: " . $product['price'] . "р" ; ?>
+                        <h5 class="card-title"><?php echo $product->getName(); ?></h5>
+                        <p class="card-title"><?php echo $product->getDescription(); ?></p></a>
+                        <div class="card-footer"> <?php echo "Цена: " . $product->getPrice() . "р" ; ?>
 
                          </div>
                     </div>
@@ -21,7 +21,7 @@
             </div>
             <form action="/add-product" method="POST">
                 <div class="container">
-                   <input type="hidden" placeholder="Enter product id" name="product_id" value="<?php echo $product['id'];  ?>" id=product_id">
+                   <input type="hidden" placeholder="Enter product id" name="product_id" value="<?php echo $product->getId();  ?>" id=product_id">
 
                     <label for="amount"><b></b></label>
                     <?php if (isset($errors['amount'])):  ?>
@@ -29,14 +29,33 @@
                     <?php endif; ?>
                     <input type="text" placeholder="Количество" name="amount" id="amount" >
 
-                    <button type="submit" class="registerbtn" >Добавить в корзину</button>
+                    <button type="submit" class="registerbtn" >+</button>
+
+
+                </div>
+                <div class="container signin">
+
+                </div>
+                </form>
+
+            <form action="/decrease-product" method="POST">
+                <div class="container">
+                    <input type="hidden" placeholder="Enter product id" name="product_id" value="<?php echo $product->getId();  ?>" id=product_id">
+
+                    <label for="amount"><b></b></label>
+                    <?php if (isset($errors['amount'])):  ?>
+                        <label style="color: red"><?php echo $errors['amount'];?></label>
+                    <?php endif; ?>
+
+
+                    <button type="submit" class="registerbtn" >-</button>
 
                     <hr>
                 </div>
                 <div class="container signin">
 
                 </div>
-                </form>
+            </form>
 
         <?php    endforeach; ?>
 

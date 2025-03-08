@@ -31,17 +31,12 @@ class CartController
             $userId = $_SESSION['userId'];
             $userProducts = $this->cartModel->getAllByUserId($userId);
 
-            $products = [];
-
             foreach ($userProducts as $userProduct) {
-                $productId = $userProduct['product_id'];
-
+                $productId = $userProduct->getProductId();
                 $product = $this->productModel->getByProduct($productId);
-
-                $product['amount'] = $userProduct['amount'];
-                $products[] = $product;
+                $userProduct->setProduct($product);
+                $totalSum = $userProduct->getAmount() * $userProduct->getProduct()->getPrice();
             }
-
             require_once '../Views/cart_page.php';
         }
     }

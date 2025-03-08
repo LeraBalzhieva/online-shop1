@@ -30,9 +30,31 @@ class App
         }
     }
 
-    public function addRoute(string $route, string $routeMethod, string $className, string $method)
+    public function get(string $route, string $className, string $method)
     {
-        $this->routes[$route][$routeMethod] = [
+        $this->routes[$route]['GET'] = [
+            'class' => $className,
+            'method' => $method,
+        ];
+    }
+
+    public function post(string $route, string $className, string $method)
+    {
+        $this->routes[$route]['POST'] = [
+            'class' => $className,
+            'method' => $method,
+        ];
+    }
+    public function put(string $route, string $className, string $method)
+    {
+        $this->routes[$route]['POST'] = [
+            'class' => $className,
+            'method' => $method,
+        ];
+    }
+    public function delete(string $route, string $className, string $method)
+    {
+        $this->routes[$route]['POST'] = [
             'class' => $className,
             'method' => $method,
         ];
