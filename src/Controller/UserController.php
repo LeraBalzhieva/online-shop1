@@ -3,14 +3,8 @@
 namespace Controller;
 
 use Model\User;
-class UserController
+class UserController extends BaseController
 {
-    private User $userModel;
-
-    public function __construct()
-    {
-        $this->userModel = new User();
-    }
     public function getRegistrate()
     {
         require_once '../Views/registration_form.php';
@@ -29,6 +23,12 @@ class UserController
     public function getEditProfile()
     {
         require_once '../Views/edit_profile_form.php';
+    }
+    private User $userModel;
+    public function __construct()
+    {
+        parent::__construct();
+        $this->userModel = new User();
     }
 
     //Регистрация
@@ -103,24 +103,15 @@ class UserController
         $errors = $this->validateByLogin($_POST);
         // если нет ошибок, подключаемся к БД
         if (empty($errors)) {
-            $username = $_POST['username'];
-            $password = $_POST['password'];
 
-            $user = $this->userModel->getByEmail($username);
+            $result = $this->authService->auth($_POST['username'], $_POST['password']);
 
-            if ($user === false) {
-                $errors['username'] = "Логин или пароль указаны неверно!";
+            if ($result) {
+                header("Location: /catalog");
+                exit();
+
             } else {
-                $passwordDB = $user->getPassword();
-
-                if (password_verify($password, $passwordDB)) {
-                    //успешный вход через сессии
-                    session_start();
-                    $_SESSION['userId'] = $user->getId();
-                    header("Location: /catalog");
-                } else {
-                    $errors['username'] = "Логин или пароль указаны неверно!";
-                }
+                $errors['username'] = "Логин или пароль указаны неверно!";
             }
         }
         require_once '../Views/login_form.php';
@@ -142,19 +133,12 @@ class UserController
     //выдача профиля
     public function profile()
     {
-        if (session_status() !== PHP_SESSION_ACTIVE) {
-            session_start();
-        }
-
-        if (isset($_SESSION['userId'])) {
-
-
-            $user = $this->userModel->verification($_SESSION['userId']);
-
-            require_once '../Views/profile_page.php';
-
+        if (!$this->authService->check()) {
+            header("Location: login");
+            exit();
         } else {
-            header("Location: ../login");
+            $user = $this->authService->getCurrentUser();
+            require_once '../Views/profile_page.php';
         }
     }
 
@@ -191,11 +175,8 @@ class UserController
 // изменение данных на странице профиля
     public function editProfile()
     {
-        if (session_status() !== PHP_SESSION_ACTIVE) {
-            session_start();
-        }
 
-        if (!isset($_SESSION['userId'])) {
+        if (!$this->authService->check()) {
             header('Location: ../login.php');
             exit;
         }
@@ -205,17 +186,15 @@ class UserController
         if (empty($errors)) {
             $name = $_POST['name'];
             $email = $_POST['mail'];
-            $userId = $_SESSION['userId'];
+            $user = $this->authService->getCurrentUser();
 
-            $user = $this->userModel->verification($_SESSION['userId']);
+            $user = $this->userModel->verification($user->getId());
 
             if ($user->getName() !== $name) {
-                $this->userModel->updateNamedByID($name, $userId);
+                $this->userModel->updateNamedByID($name, $user->getId());
             }
-
             if ($user->getEmail() !== $email) {
-
-                $this->userModel->updateEmailByID($email, $userId);
+                $this->userModel->updateEmailByID($email, $user->getId());
             }
             header('Location: /profile');
             exit;
@@ -225,11 +204,7 @@ class UserController
 
     public function logout()
     {
-        if (session_status() !== PHP_SESSION_ACTIVE) {
-            session_start();
-
-            session_destroy();
-            header('Location: ../login');
-        }
+        $this->authService->logout();
+        header('Location: login');
     }
 }

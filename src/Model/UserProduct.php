@@ -30,7 +30,7 @@ class UserProduct extends Model
 
     }
 
-    public function getByUserProducts(int $userId, int $productId): UserProduct|false
+    public function getByUserProducts(int $userId, int $productId): UserProduct|null
     {
         $stmt = $this->pdo->prepare("SELECT * FROM user_products WHERE user_id = :user_id AND product_id = :productId");
         $stmt->execute([':user_id' => $userId, ':productId' => $productId]);
@@ -38,7 +38,7 @@ class UserProduct extends Model
         if ($result) {
             return $this->hydrate($result);
         }
-        return false;
+        return null;
     }
 
     public function addUserProduct(int $userId, int $productId, int $amount)

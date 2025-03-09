@@ -12,7 +12,7 @@ class Product extends Model
 
     private int $total;
 
-    public function getByCatalog(int $productId): array|null
+    public function getByCatalog(): array|null
     {
         $stmt = $this->pdo->query('SELECT * FROM products');
         $products = $stmt->fetchAll();

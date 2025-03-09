@@ -1,34 +1,37 @@
 <?php
+
 namespace Controller;
 use Model\OrderProduct;
 use Model\Order;
 use Model\Product;
 use Model\UserProduct;
-
-class OrderController
+use Service\AuthService;
+class OrderController extends BaseController
 {
     private Order $orderModel;
     private UserProduct $userProductModel;
     private Product $productModel;
     private OrderProduct $orderProductModel;
+
     public function __construct()
     {
+        parent::__construct();
         $this->orderModel = new Order();
         $this->userProductModel = new UserProduct();
         $this->productModel = new Product();
         $this->orderProductModel = new OrderProduct();
     }
+
     public function getOrder()
     {
         require_once '../Views/order_page.php';
     }
+
     public function order()
     {
-        if (session_status() !== PHP_SESSION_ACTIVE) {
-            session_start();
-        }
+        $this->authService->startSession();
 
-        if (!isset($_SESSION['userId'])) {
+        if (!$this->authService->check()) {
             header("Location: ../login");
             exit();
         }
@@ -36,16 +39,16 @@ class OrderController
         $errors = $this->validateByOrder($_POST);
 
         if (empty($errors)) {
-            $userId = $_SESSION['userId'];
+            $user = $this->authService->getCurrentUser();
             $name = $_POST['name'];
             $phone = $_POST['phone'];
             $city = $_POST['city'];
             $address = $_POST['address'];
             $comment = $_POST['comment'];
 
-            $orderId = $this->orderModel->addOrder($name, $phone, $city, $address, $userId, $comment);
+            $orderId = $this->orderModel->addOrder($name, $phone, $city, $address, $user->getId(), $comment);
 
-            $userProducts = $this->userProductModel->getAllByUserId($userId);
+            $userProducts = $this->userProductModel->getAllByUserId($user->getId());
 
 
             $orderProduct = new OrderProduct();
@@ -56,7 +59,7 @@ class OrderController
                 $orderProduct->create($productId, $orderId, $amount);
             }
 
-            $this->userProductModel->deleteByUserId($userId);
+            $this->userProductModel->deleteByUserId($user->getId());
             header("Location: /order");
             exit();
 
@@ -65,6 +68,7 @@ class OrderController
         }
 
     }
+
     private function validateByOrder(array $data): array
     {
         $errors = [];
@@ -110,19 +114,17 @@ class OrderController
 
     public function getOrderProduct()
     {
-        if (session_status() !== PHP_SESSION_ACTIVE) {
-            session_start();
-        }
+        $this->authService->startSession();
 
-        if (!isset($_SESSION['userId'])) {
+        if (!$this->authService->check()) {
             header('Location: ../login');
             exit();
         } else {
 
-            $userId = $_SESSION['userId'];
-            $userProducts = $this->userProductModel->getAllByUserId($userId);
+            $user = $this->authService->getCurrentUser();
+            $userProducts = $this->userProductModel->getAllByUserId($user->getId());
 
-            $total =0;
+            $total = 0;
 
             foreach ($userProducts as $userProduct) {
                 $productId = $userProduct->getProductId();
@@ -133,20 +135,19 @@ class OrderController
             require_once '../Views/order_page.php';
         }
     }
+
     public function getAllOrders()
     {
-        if (session_status() !== PHP_SESSION_ACTIVE) {
-            session_start();
-        }
+        $this->authService->startSession();
 
-        if (!isset($_SESSION['userId'])) {
+        if (!$this->authService->check()) {
             header("Location: ../login");
             exit();
         }
-        $userId = $_SESSION['userId'];
+        $user = $this->authService->getCurrentUser();
 
         // достаем все заказы Order
-        $userOrders = $this->orderModel->getAllByUserId($userId);
+        $userOrders = $this->orderModel->getAllByUserId($user->getId());
 
         $newUserOrders = [];
 
@@ -162,31 +163,9 @@ class OrderController
                 $orderProduct->setProduct($product);
                 $totalSum += $orderProduct->getAmount() * $product->getPrice();
                 $newOrderProducts[] = $orderProduct;
+            }
+            require_once '../Views/order_product_page.php';
         }
-
-    /*
-
-
-
-         /*   $newOrderProducts = [];
-            $sum = 0;*/
-
-            }
-                /*
-                 * $orderProduct->setProduct($product);
-                 * $orderProductTotal = $orderProduct->getPrice() * $orderProduct->getAmount();
-                $orderProduct->setTotal($orderProductTotal);
-
-                $newOrderProducts[] = $orderProduct;
-                $sum += $orderProductTotal;
-                
-            }
-            $userOrder->setTotal($sum);
-            $userOrder->setProducts($newOrderProducts);
-            $newUserOrders[] = $userOrder;*/
-
-
-        require_once '../Views/order_product_page.php';
     }
 
 

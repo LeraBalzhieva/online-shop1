@@ -5,13 +5,14 @@ namespace Controller;
 use Model\Product;
 use Model\UserProduct;
 
-class ProductController
+class ProductController extends BaseController
 {
     private Product $productModel;
     private UserProduct $userProductModel;
 
     public function __construct()
     {
+        parent::__construct();
         $this->productModel = new Product();
         $this->userProductModel = new UserProduct();
     }
@@ -28,46 +29,36 @@ class ProductController
 
     public function catalog()
     {
-        if (session_status() !== PHP_SESSION_ACTIVE) {
-            session_start();
-        }
+        $this->authService->startSession();
 
-        if (isset($_SESSION['userId'])) {
-
-            $products = $this->productModel->getByCatalog($_SESSION['userId']);
+        if ($this->authService->check()) {
+            $products = $this->productModel->getByCatalog();
             require_once '../Views/catalog_page.php';
         } else {
-            header("Location: ../login");
+            header("Location: login");
             exit();
         }
     }
 
     public function addProduct()
     {
-        if (session_status() !== PHP_SESSION_ACTIVE) {
-            session_start();
-        }
+        $this->authService->startSession();
 
-        if (!isset($_SESSION['userId'])) {
-            header('Location: ../login.php');
+        if (!$this->authService->check()) {
+            header('Location: login.php');
             exit;
         }
-
         $errors = $this->validateProduct($_POST);
         if (empty($errors)) {
-
-            $userId = $_SESSION['userId'];
+            $user = $this->authService->getCurrentUser();
             $productId = $_POST['product_id'];
-            $amount = $_POST['amount'];
-
-            $product = $this->userProductModel->getByUserProducts($userId, $productId);
-
-            if ($product === false) {
-                $this->userProductModel->addUserProduct($userId, $productId, $amount);
-
+            $amount = 1;
+            $product = $this->userProductModel->getByUserProducts($user->getId(), $productId);
+            if (!$product) {
+                $this->userProductModel->addUserProduct($user->getId(), $productId, $amount);
             } else {
-                $amount = $amount + $product->getAmount();
-                $this->userProductModel->updateUserProduct($userId, $productId, $amount);
+                $newAmount = $amount + $product->getAmount();
+                $this->userProductModel->updateUserProduct($user->getId(), $productId, $newAmount);
             }
         }
         header("Location: /catalog");
@@ -76,32 +67,28 @@ class ProductController
 
     public function decreaseProduct()
     {
-        if (session_status() !== PHP_SESSION_ACTIVE) {
-            session_start();
-        }
+        $this->authService->startSession();
 
-        if (!isset($_SESSION['userId'])) {
-            header('Location: ../login.php');
+        if (!$this->authService->check()) {
+            header('Location: login.php');
             exit;
         }
-        $userId = $_SESSION['userId'];
+        $user = $this->authService->getCurrentUser();
         $productId = $_POST['product_id'];
-        $amount = $_POST['amount'];
+        $products = $this->userProductModel->getByUserProducts($user->getId(), $productId);
 
-        $product = $this->userProductModel->getByUserProducts($userId, $productId);
-
-        if ($product !== false) {
+        if ($products !== null) {
+            $amount = $products->getAmount();
             if ($amount > 1) {
                 $newAmount = $amount - 1;
-                $this->userProductModel->updateUserProduct($userId, $productId, $newAmount);
+                $this->userProductModel->updateUserProduct($user->getId(), $productId, $newAmount);
             } else {
-                $this->userProductModel->deleteUserProduct($userId, $productId);
+                $this->userProductModel->deleteUserProduct($user->getId(), $productId);
             }
         }
         header("Location: /catalog");
         exit();
     }
-
 
     private function validateProduct(array $data): array
     {

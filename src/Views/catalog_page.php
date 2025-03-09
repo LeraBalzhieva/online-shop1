@@ -22,31 +22,20 @@
             <form action="/add-product" method="POST">
                 <div class="container">
                    <input type="hidden" placeholder="Enter product id" name="product_id" value="<?php echo $product->getId();  ?>" id=product_id">
-
                     <label for="amount"><b></b></label>
-                    <?php if (isset($errors['amount'])):  ?>
-                        <label style="color: red"><?php echo $errors['amount'];?></label>
-                    <?php endif; ?>
+
                     <input type="text" placeholder="Количество" name="amount" id="amount" >
-
-                    <button type="submit" class="registerbtn" >+</button>
-
-
                 </div>
                 <div class="container signin">
 
                 </div>
+                <button type="submit" class="registerbtn" >+</button>
                 </form>
 
             <form action="/decrease-product" method="POST">
                 <div class="container">
                     <input type="hidden" placeholder="Enter product id" name="product_id" value="<?php echo $product->getId();  ?>" id=product_id">
-
                     <label for="amount"><b></b></label>
-                    <?php if (isset($errors['amount'])):  ?>
-                        <label style="color: red"><?php echo $errors['amount'];?></label>
-                    <?php endif; ?>
-
 
                     <button type="submit" class="registerbtn" >-</button>
 
