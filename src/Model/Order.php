@@ -14,6 +14,10 @@ class Order extends Model
     private int $userId;
 
 
+    private int $total;
+    private array $orderProducts;
+
+
     public function addOrder(string $name,  string $address, string $city, string $phone, int $userId, string $comment)
     {
         $stmt = $this->pdo->prepare(
@@ -93,6 +97,24 @@ class Order extends Model
     public function getUserId(): int
     {
         return $this->userId;
+    }
+
+    public function getTotal(): int
+    {
+        return $this->total;
+    }
+    public function getOrderProducts(): array
+    {
+        return $this->orderProducts;
+    }
+    public function setTotal(int $total): void
+    {
+        $this->total = $total;
+    }
+
+    public function setOrderProducts(array $orderProducts): void
+    {
+        $this->orderProducts = $orderProducts;
     }
 
 

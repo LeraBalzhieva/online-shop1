@@ -33,6 +33,8 @@ class ProductController extends BaseController
 
         if ($this->authService->check()) {
             $products = $this->productModel->getByCatalog();
+
+
             require_once '../Views/catalog_page.php';
         } else {
             header("Location: login");
@@ -109,14 +111,6 @@ class ProductController extends BaseController
             $errors['product_id'] = "Строка должна быть заполнена";
         }
 
-        if (isset($data['amount'])) {
-            $amount = (int)$data['amount'];
-            if (($amount < 1) || ($amount) > 100) {
-                $errors['amount'] = "Количество не может быть отрицательным и больше 100";
-            }
-        } else {
-            $errors['amount'] = "Строка должна быть заполнена";
-        }
         return $errors;
     }
 }

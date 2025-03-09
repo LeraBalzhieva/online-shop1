@@ -1,94 +1,88 @@
-
 <div class="container">
-    <li class="active"><a href="/catalog">Каталог</a></li>
-    <li class="active"><a href="/order">К оформлению</a></li>
 
-    <h3>Ваш заказ:</h3>
-    <div>
-        <?php foreach ($userOrders as $newUserOrder): ?>
-            <div class="card text-center">
+        <li class="nav-item"><a class="nav-link active" href="/catalog">Каталог</a></li>
 
-                <div class="card-body">
-                    <h2>Заказ номер: <?php echo $newUserOrder->getId()?></h2>
-                    <p class="card-text">Имя: <?php echo $newUserOrder->getName(); ?></p>
-                    <p class="card-text">Номер телефона: <?php echo $newUserOrder->getPhone(); ?></p>
-                    <p class="card-text">Город: <?php echo $newUserOrder->getCity(); ?></p>
-                    <p class="card-text">Адрес: <?php echo $newUserOrder->getAddress(); ?></p>
-                    <p class="card-text">Комметарии: <?php echo $newUserOrder->getComment(); ?></p>
 
-                    <div class="card-text">
+    <h3 class="text-center">Ваши заказы:</h3>
 
-                        <h3>Ваш заказ: </h3>
-               <?php foreach ($newOrderProducts as $newOrderProduct): ?>
+    <?php foreach ($userOrders as $newUserOrder): ?>
+        <div class="card mb-4">
+            <div class="card-body">
+                <h2 class="card-title">Заказ номер: <?php echo $newUserOrder->getId()?></h2>
+                <p class="card-text"><strong>Имя:</strong> <?php echo $newUserOrder->getName(); ?></p>
+                <p class="card-text"><strong>Номер телефона:</strong> <?php echo $newUserOrder->getPhone(); ?></p>
+                <p class="card-text"><strong>Город:</strong> <?php echo $newUserOrder->getCity(); ?></p>
+                <p class="card-text"><strong>Адрес:</strong> <?php echo $newUserOrder->getAddress(); ?></p>
+                <p class="card-text"><strong>Комментарии:</strong> <?php echo $newUserOrder->getComment(); ?></p>
 
-                        <p class="card-text"><?php echo $newOrderProduct->getProduct()->getName(); ?></p>
-                        <p class="card-text">Цена: <?php echo $newOrderProduct->getProduct()->getPrice(); ?> р</p>
-                        <p class="card-text">Количество: <?php echo $newOrderProduct->getAmount(); ?> шт</p>
-
+                <h4 class="mt-4">Список продуктов:</h4>
+                <?php foreach ($newUserOrder->getOrderProducts() as $orderProduct): ?>
+                    <div class="product-item">
+                        <p class="card-text"><strong>Название продукта:</strong> <?php echo $orderProduct->getProduct()->getName(); ?></p>
+                        <p class="card-text"><strong>Цена:</strong> <?php echo $orderProduct->getProduct()->getPrice(); ?> р</p>
+                        <p class="card-text"><strong>Количество:</strong> <?php echo $orderProduct->getAmount(); ?> шт</p>
                     </div>
-                    <?php endforeach; ?>
-                </div>
+                <?php endforeach; ?>
+
                 <hr>
-                </a>
+                <p class="font-weight-bold">Общая сумма заказа: <span class="total-price"><?php echo $newUserOrder->getTotal(); ?> р</span></p>
             </div>
-          <p class="card-text"><h3>Общая сумма заказа: <?php echo $totalSum; ?> р</h3></p>
+        </div>
+    <?php endforeach; ?>
+</div>
 
-        <?php endforeach; ?>
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f8f9fa;
+        color: #333;
+        padding: 20px;
+    }
 
-        <style>
-            body {
-                font-style: sans-serif;
-                text-align: -webkit-match-parent;
-            }
+    .nav-pills .nav-link {
+        margin-right: 15px;
+        border-radius: 5px;
+    }
 
-            a {
-                text-decoration: none;
+    .nav-pills .nav-link.active {
+        background-color: #007bff;
+        color: white;
+    }
 
-            }
+    h3 {
+        margin-bottom: 20px;
+        text-align: center;
 
-            h5 {
-                font-size: 1.1em;
-            }
+    }
 
-            a:hover {
-                text-decoration: none;
+    .card {
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        transition: box-shadow 0.3s;
+        background-color: white;
+    }
 
-            }
+    .card:hover {
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
 
-            h3 {
-                line-height: 5em;
+    .product-item {
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+    }
 
-            }
+    .product-item:last-child {
+        border-bottom: none; /* Убираем нижнюю границу у последнего элемента */
+    }
 
-            .card {
-                max-width: 30rem;
-                text-align: center;
-            }
+    .font-weight-bold {
+        font-weight: bold;
+        font-size: 1.2em;
+    }
 
-            .card:hover {
-                box-shadow: 1px 2px 10px lightgray;
-                transition: 0.3s;
-
-            }
-
-
-            .card-header {
-                font-size: 15px;
-                color: gray;
-                background-color: white;
-
-            }
-
-            .text-muted {
-                font-size: 15px;
-                text-align: center;
-            }
-
-            .card-footer {
-                font-weight: bold;
-                font-size: 15px;
-                background-color: white;
-                text-align: center;
-            }
-        </style>
-<?php
+    .total-price {
+        color: #28a745; /* Зеленый цвет для общей суммы */
+        font-size: 1.5em; /* Увеличенный размер шрифта */
+    }
+</style>

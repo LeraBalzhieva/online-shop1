@@ -164,9 +164,15 @@ class OrderController extends BaseController
                 $totalSum += $orderProduct->getAmount() * $product->getPrice();
                 $newOrderProducts[] = $orderProduct;
             }
-            require_once '../Views/order_product_page.php';
+            $userOrder->setOrderProducts($newOrderProducts);
+            $userOrder->setTotal($totalSum);
+            $newUserOrders[] = $userOrder;
         }
+
+        require_once '../Views/order_product_page.php';
     }
 
 
 }
+
+
