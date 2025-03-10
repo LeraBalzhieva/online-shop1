@@ -1,11 +1,7 @@
 <?php
 
 namespace Model;
-
-//use Model;
-
 class OrderProduct extends Model
-
 {
     private int $id;
     private int $productId;

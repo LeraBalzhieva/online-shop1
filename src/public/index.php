@@ -45,6 +45,9 @@ $app->post('/order',OrderController::class, 'order');
 $app->get('/orderProduct', OrderController:: class, 'getAllOrders');
 
 
+$app->post('/product',ProductController::class, 'getProductReviews');
+$app->post('/review', ProductController::class, 'addReviews');
+
 
 $app->run();
 

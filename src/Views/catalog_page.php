@@ -31,6 +31,12 @@
                         </form>
                     </div>
                 </div>
+
+
+                <form action="/product" method="POST">
+                    <input type="hidden" name="product_id" value="<?php echo $product->getId(); ?>">
+                    <button type="submit">Открыть продукт</button>
+                </form>
             </div>
         <?php endforeach; ?>
     </div>
