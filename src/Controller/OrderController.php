@@ -6,12 +6,16 @@ use Model\Order;
 use Model\Product;
 use Model\UserProduct;
 use Service\AuthService;
+use Service\OrderService;
+
 class OrderController extends BaseController
 {
     private Order $orderModel;
     private UserProduct $userProductModel;
     private Product $productModel;
     private OrderProduct $orderProductModel;
+    private OrderService $orderService;
+
 
     public function __construct()
     {
@@ -20,8 +24,8 @@ class OrderController extends BaseController
         $this->userProductModel = new UserProduct();
         $this->productModel = new Product();
         $this->orderProductModel = new OrderProduct();
+        $this->orderService = new OrderService();
     }
-
     public function getOrder()
     {
         require_once '../Views/order_page.php';
@@ -48,18 +52,8 @@ class OrderController extends BaseController
 
             $orderId = $this->orderModel->addOrder($name, $phone, $city, $address, $user->getId(), $comment);
 
-            $userProducts = $this->userProductModel->getAllByUserId($user->getId());
+            $this->orderService->order($user->getId(), $orderId);
 
-
-            $orderProduct = new OrderProduct();
-            foreach ($userProducts as $userProduct) {
-
-                $productId = $userProduct->getProductId();
-                $amount = $userProduct->getAmount();
-                $orderProduct->create($productId, $orderId, $amount);
-            }
-
-            $this->userProductModel->deleteByUserId($user->getId());
             header("Location: /order");
             exit();
 

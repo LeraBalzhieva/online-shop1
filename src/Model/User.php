@@ -7,10 +7,13 @@ class User extends Model
     private string $email;
     private string $password;
     private string $image;
-
+    protected function getTableName(): string
+    {
+        return 'users';
+    }
     public function getByEmail(string $email): self|null
     {
-        $stmt = $this->pdo->prepare("SELECT * FROM users WHERE email = :email");
+        $stmt = $this->pdo->prepare("SELECT * FROM {$this->getTableName()} WHERE email = :email");
         $stmt->execute([':email' => $email]);
         $result = $stmt->fetch();
         return $this->hydrate($result);
@@ -33,20 +36,19 @@ class User extends Model
     public function updateEmailByID(string $email, int $userId)
     {
 
-        $stmt = $this->pdo->prepare("UPDATE users SET name = :name WHERE id = $userId");
+        $stmt = $this->pdo->prepare("UPDATE {$this->getTableName()} SET name = :name WHERE id = $userId");
         $stmt->execute([':name' => $email]);
     }
 
     public function updateNamedByID(string $name, int $userId)
     {
-
-        $stmt = $this->pdo->prepare("UPDATE users SET name = :name WHERE id = $userId");
+        $stmt = $this->pdo->prepare("UPDATE {$this->getTableName()} SET name = :name WHERE id = $userId");
         $stmt->execute([':name' => $name]);
     }
 
     public function addUser(string $name, string $email, string $password, string $photo): array|false
     {
-        $stmt = $this->pdo->prepare("INSERT INTO users (name, email, password, image_url) VALUES (:name, :email, :password, :image_url)");
+        $stmt = $this->pdo->prepare("INSERT INTO {$this->getTableName()} (name, email, password, image_url) VALUES (:name, :email, :password, :image_url)");
         $stmt->execute([':name' => $name, ':email' => $email, ':password' => $password, 'image_url' => $photo]);
         $result = $stmt->fetch();
         return $result;
@@ -54,7 +56,7 @@ class User extends Model
 
     public function verification(int $userId)
     {
-        $stmt = $this->pdo->query('SELECT * FROM users WHERE id = ' . $_SESSION['userId']);
+        $stmt = $this->pdo->query("SELECT * FROM {$this->getTableName()} WHERE id = $userId");
         $result = $stmt->fetch();
 
         return $this->hydrate($result);

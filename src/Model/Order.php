@@ -12,15 +12,19 @@ class Order extends Model
     private string $phone;
     private string $comment;
     private int $userId;
-
     private int $total;
     private array $orderProducts;
+
+    protected function getTableName(): string
+    {
+        return 'orders';
+    }
 
 
     public function addOrder(string $name,  string $phone, string $city,  string $address, int $userId, string $comment)
     {
         $stmt = $this->pdo->prepare(
-            "INSERT INTO orders (name, phone, city, address, user_id, comment)
+            "INSERT INTO {$this->getTableName()} (name, phone, city, address, user_id, comment)
                     VALUES (:name, :phone, :city, :address, :user_id, :comment) RETURNING id"
         );
         $stmt->execute([
@@ -37,7 +41,7 @@ class Order extends Model
 
     public function getAllByUserId(int $userId): array|null
     {
-        $stmt = $this->pdo->prepare('SELECT * FROM orders WHERE user_id = :userId');
+        $stmt = $this->pdo->prepare("SELECT * FROM {$this->getTableName()} WHERE user_id = :userId");
         $stmt->execute(['userId' => $userId]);
         $orders = $stmt->fetchAll();
         $newOrder = [];
@@ -47,6 +51,7 @@ class Order extends Model
         return $newOrder;
 
     }
+
 
     private function hydrate($orders): self|null
     {

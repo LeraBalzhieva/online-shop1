@@ -47,13 +47,11 @@ class AuthService
             }
         }
     }
-
     public function logout()
     {
         $this->startSession();
         session_destroy();
     }
-
     public function startSession()
     {
         if (session_status() !== PHP_SESSION_ACTIVE) {

@@ -31,9 +31,9 @@ $app->get('/logout', UserController:: class, 'logout');
 $app->get('/catalog', ProductController:: class, 'catalog');
 $app->post('/catalog', ProductController::class, 'getCatalog');
 
-$app->get('/add-product', ProductController:: class, 'getAddProduct');
-$app->post('/add-product', ProductController::class, 'addProduct');
-$app->post('/decrease-product', ProductController::class, 'decreaseProduct');
+$app->get('/add-product', CartController:: class, 'getAddProduct');
+$app->post('/add-product', CartController::class, 'addProduct');
+$app->post('/decrease-product', CartController::class, 'decreaseProduct');
 
 
 $app->get('/cart', CartController:: class, 'getCart');

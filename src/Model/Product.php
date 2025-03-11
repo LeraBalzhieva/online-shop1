@@ -9,12 +9,15 @@ class Product extends Model
     private float $price;
     private string $description;
     private string $image;
-
     private int $total;
+    protected function getTableName(): string
+    {
+        return 'products';
+    }
 
     public function getByCatalog(): array|null
     {
-        $stmt = $this->pdo->query('SELECT * FROM products');
+        $stmt = $this->pdo->query("SELECT * FROM {$this->getTableName()}");
         $products = $stmt->fetchAll();
         $newProducts = [];
         foreach ($products as $product) {
@@ -37,7 +40,7 @@ class Product extends Model
     }
     public function getByProduct(int $productId): self|null
     {
-        $stmt = $this->pdo->prepare("SELECT * FROM products WHERE id = :productId");
+        $stmt = $this->pdo->prepare("SELECT * FROM {$this->getTableName()} WHERE id = :productId");
         $stmt->execute([':productId' => $productId]);
         $result = $stmt->fetch();
 

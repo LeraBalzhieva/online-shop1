@@ -5,19 +5,20 @@ namespace Controller;
 use Model\Product;
 use Model\UserProduct;
 use Model\Review;
+use Service\CartService;
 
 class ProductController extends BaseController
 {
     private Review $reviewModel;
     private Product $productModel;
-    private UserProduct $userProductModel;
+
 
     public function __construct()
     {
         parent::__construct();
         $this->reviewModel = new Review();
         $this->productModel = new Product();
-        $this->userProductModel = new UserProduct();
+
     }
 
     public function getCatalog()
@@ -32,7 +33,6 @@ class ProductController extends BaseController
 
     public function catalog()
     {
-
         if ($this->authService->check()) {
             $products = $this->productModel->getByCatalog();
             require_once '../Views/catalog_page.php';
@@ -41,76 +41,6 @@ class ProductController extends BaseController
             exit();
         }
     }
-    public function addProduct()
-    {
-
-        if (!$this->authService->check()) {
-            header('Location: login');
-            exit;
-        }
-        $errors = $this->validateProduct($_POST);
-        if (empty($errors)) {
-            $user = $this->authService->getCurrentUser();
-            $productId = $_POST['product_id'];
-            $amount = 1;
-            $product = $this->userProductModel->getByUserProducts($user->getId(), $productId);
-            if (!$product) {
-                $this->userProductModel->addUserProduct($user->getId(), $productId, $amount);
-            } else {
-                $newAmount = $amount + $product->getAmount();
-                $this->userProductModel->updateUserProduct($user->getId(), $productId, $newAmount);
-            }
-        }
-        header("Location: /catalog");
-        exit();
-    }
-
-    public function decreaseProduct()
-    {
-
-        if (!$this->authService->check()) {
-            header('Location: login.php');
-            exit;
-        }
-        $user = $this->authService->getCurrentUser();
-        $productId = $_POST['product_id'];
-        $products = $this->userProductModel->getByUserProducts($user->getId(), $productId);
-
-        if ($products !== null) {
-            $amount = $products->getAmount();
-            if ($amount > 1) {
-                $newAmount = $amount - 1;
-                $this->userProductModel->updateUserProduct($user->getId(), $productId, $newAmount);
-            } else {
-                $this->userProductModel->deleteUserProduct($user->getId(), $productId);
-            }
-        }
-        header("Location: /catalog");
-        exit();
-    }
-
-
-    private function validateProduct(array $data): array
-    {
-        $errors = [];
-
-        if (isset($data['product_id'])) {
-            $productId = (int)$data['product_id'];
-
-            $product = $this->productModel->getByProduct($productId);
-
-            if ($product === false) {
-                $errors['product_id'] = "Продукт не найден";
-            }
-            if ($productId < 1) {
-                $errors['product_id'] = "Id не может быть отрицательным";
-            }
-        } else {
-            $errors['product_id'] = "Строка должна быть заполнена";
-        }
-
-        return $errors;
-    }
 
     public function getProductReviews()
     {
@@ -118,15 +48,16 @@ class ProductController extends BaseController
             header('Location: login');
             exit;
         }
-        $productId = (int) $_POST['product_id'];
+        $productId = (int)$_POST['product_id'];
         $products = $this->productModel->getByProduct($productId);
         $reviews = $this->reviewModel->getReviews($productId);
 
-        $averageRating = (float) $this->reviewModel->getAverageRating($productId);
+        $averageRating = (float)$this->reviewModel->getAverageRating($productId);
 
 
         require_once '../Views/reviews_page.php';
     }
+
     public function addReviews()
     {
         if (!$this->authService->check()) {
@@ -141,8 +72,8 @@ class ProductController extends BaseController
             $rating = $_POST['rating'];
             $comment = $_POST['comment'];
             $review = $this->reviewModel->addReview($productId, $user->getId(), $rating, $comment);
-           /* header("Location: /product");
-            exit();*/
+            /* header("Location: /product");
+             exit();*/
         }
         $this->getProductReviews();
     }
@@ -150,7 +81,6 @@ class ProductController extends BaseController
     private function reviewValidate(array $data): array
     {
         $errors = [];
-
         if (isset($data['comment'])) {
             $reviewComment = $data['comment'];
             if (strlen($reviewComment) < 2 || strlen($reviewComment) > 255) {
@@ -159,6 +89,4 @@ class ProductController extends BaseController
         }
         return $errors;
     }
-
-
 }

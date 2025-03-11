@@ -4,18 +4,21 @@ namespace Controller;
 
 use Model\UserProduct;
 use Model\Product;
+use Service\AuthService;
+use Service\CartService;
 
 
 class CartController extends BaseController
 {
     private UserProduct $cartModel;
     private Product $productModel;
-
+    private CartService $productService;
     public function __construct()
     {
         parent::__construct();
         $this->cartModel = new UserProduct();
         $this->productModel = new Product();
+        $this->productService = new CartService();
     }
 
     public function getCartPage()
@@ -52,6 +55,57 @@ class CartController extends BaseController
             $newUserProducts = $userProducts;
             require_once '../Views/cart_page.php';
         }
+    }
+
+    public function addProduct()
+    {
+        if ($this->authService->check()) {
+            $user = $this->authService->getCurrentUser();
+            $productId = $_POST['product_id'];
+            $amount = 1;
+            $errors = $this->validateProduct($_POST);
+            if (empty($errors)) {
+                $this->productService->addProduct($productId, $user->getId(), $amount);
+            }
+            header('Location: catalog');
+            exit;
+        } else {
+            header("Location: /catalog");
+            exit();
+        }
+    }
+
+    public function decreaseProduct()
+    {
+        if (!$this->authService->check()) {
+            header('Location: login.php');
+            exit;
+        }
+        $user = $this->authService->getCurrentUser();
+        $productId = $_POST['product_id'];
+        $this->productService->decreaseProduct($productId, $user->getId());
+        header("Location: /catalog");
+        exit();
+    }
+    private function validateProduct(array $data): array
+    {
+        $errors = [];
+
+        if (isset($data['product_id'])) {
+            $productId = (int)$data['product_id'];
+
+            $product = $this->productModel->getByProduct($productId);
+
+            if ($product === false) {
+                $errors['product_id'] = "Продукт не найден";
+            }
+            if ($productId < 1) {
+                $errors['product_id'] = "Id не может быть отрицательным";
+            }
+        } else {
+            $errors['product_id'] = "Строка должна быть заполнена";
+        }
+        return $errors;
     }
 
 }

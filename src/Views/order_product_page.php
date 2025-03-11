@@ -15,9 +15,9 @@
                 <p class="card-text"><strong>Адрес:</strong> <?php echo $newUserOrder->getAddress(); ?></p>
                 <p class="card-text"><strong>Комментарии:</strong> <?php echo $newUserOrder->getComment(); ?></p>
 
-                <h4 class="mt-4">Список продуктов:</h4>
                 <?php foreach ($newUserOrder->getOrderProducts() as $orderProduct): ?>
                     <div class="product-item">
+                        <h4 class="mt-4">Список продуктов:</h4>
                         <p class="card-text"><strong>Название продукта:</strong> <?php echo $orderProduct->getProduct()->getName(); ?></p>
                         <p class="card-text"><strong>Цена:</strong> <?php echo $orderProduct->getProduct()->getPrice(); ?> р</p>
                         <p class="card-text"><strong>Количество:</strong> <?php echo $orderProduct->getAmount(); ?> шт</p>

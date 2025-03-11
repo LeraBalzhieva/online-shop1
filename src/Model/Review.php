@@ -9,10 +9,14 @@ class Review extends Model
     private int $rating;
     private string $comment;
     private $createdAt;
+    protected function getTableName(): string
+    {
+        return 'reviews';
+    }
 
     public function getReviews(int $productId): array
     {
-        $stmt = $this->pdo->prepare('SELECT * FROM reviews WHERE product_id = :product_id');
+        $stmt = $this->pdo->prepare("SELECT * FROM {$this->getTableName()} WHERE product_id = :product_id");
         $stmt->execute(['product_id' => $productId]);
         $result = $stmt->fetchAll();
         $results = [];
@@ -23,13 +27,13 @@ class Review extends Model
     }
     public function getAverageRating($productId)
     {
-        $stmt = $this->pdo->prepare("SELECT AVG(rating) as average_rating FROM reviews WHERE product_id = :product_id");
+        $stmt = $this->pdo->prepare("SELECT AVG(rating) as average_rating FROM {$this->getTableName()} WHERE product_id = :product_id");
         $stmt->execute(['product_id' => $productId]);
         return $stmt->fetchColumn();
     }
     public function addReview(int $productId, int $userId, int $rating, string $comment)
     {
-        $stmt = $this->pdo->prepare("INSERT INTO reviews (product_id, user_id, rating, comment) 
+        $stmt = $this->pdo->prepare("INSERT INTO {$this->getTableName()} (product_id, user_id, rating, comment) 
                                             VALUES (:product_id, :user_id, :rating, :comment)");
         $stmt->execute(['product_id' => $productId, 'user_id' => $userId, 'rating' => $rating, 'comment' => $comment]);
         $result = $stmt->fetch();
