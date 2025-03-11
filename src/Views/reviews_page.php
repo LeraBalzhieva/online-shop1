@@ -5,7 +5,7 @@
     <p>Название продукта: <?php if (isset($products)) echo $products->getName(); ?></p>
     <p>Описание: <?php if (isset($products)) echo $products->getDescription(); ?></p>
     <p>Цена: <?php if (isset($products)) echo $products->getPrice(); ?> р.</strong></p>
-    <p>Средняя оценка <?php echo "$averageRating"; ?></p>
+    <p>Средняя оценка <?php echo $averageRating; ?></p>
 
 </div>
 
@@ -28,7 +28,7 @@
 
 <h2>Оставить отзыв</h2>
 <form method="post" action="/review">
-    <input type="hidden" name="product_id" value="<?php if (isset($products))echo $products->getId(); ?>"<>
+    <input type="hidden" name="product_id" value="<?php if (isset($products))echo $products->getId(); ?>"/>
 
     <label for="rating">Оценка:</label>
     <select name="rating" id="rating">

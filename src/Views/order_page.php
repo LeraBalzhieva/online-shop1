@@ -6,6 +6,7 @@
             <div class="container">
 
                 <li class="active"><a href="/cart">Назад в корзину</a></li>
+                <li class="active"><a href="/catalog">Назад в каталог</a>
                 <div class="row">
                     <div class="col-50">
                         <h3>Введите данные:</h3>

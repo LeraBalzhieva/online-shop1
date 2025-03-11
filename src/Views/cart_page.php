@@ -14,18 +14,17 @@
                     <p class="card-text"><?php echo $userProduct->getProduct()->getName(); ?></p>
                     <p class="card-text">Количество: <?php echo $userProduct->getAmount(); ?></p></a>
                     <p class="card-text">Цена:<?php echo $userProduct->getProduct()->getPrice() . " р"; ?> </p>
-                    <p class="card-text">Итого:<?php echo $totalSum . " p"; ?> <br></p>
-
-
+                    <p class="card-text">Итого:<?php echo  $userProduct->getTotal(). " p"; ?> <br></p>
                 </div>
                 </div>
                 <hr>
-
                 </a>
             </div>
-
-
         <?php endforeach; ?>
+
+    <h3>Общая сумма заказа: <?php echo $totalOrderSum ?> руб.</h3>
+
+
 
         <style>
             body {

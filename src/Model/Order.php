@@ -13,16 +13,15 @@ class Order extends Model
     private string $comment;
     private int $userId;
 
-
     private int $total;
     private array $orderProducts;
 
 
-    public function addOrder(string $name,  string $address, string $city, string $phone, int $userId, string $comment)
+    public function addOrder(string $name,  string $phone, string $city,  string $address, int $userId, string $comment)
     {
         $stmt = $this->pdo->prepare(
-            "INSERT INTO orders (name, address, city, phone, user_id, comment)
-                    VALUES (:name, :address, :city, :phone, :user_id, :comment) RETURNING id"
+            "INSERT INTO orders (name, phone, city, address, user_id, comment)
+                    VALUES (:name, :phone, :city, :address, :user_id, :comment) RETURNING id"
         );
         $stmt->execute([
             'name' => $name,

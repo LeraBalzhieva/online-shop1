@@ -9,6 +9,7 @@ class UserProduct extends Model
     private int $productId;
     private float $amount;
     private Product $product;
+    private int $total;
 
     public function getAllByUserId(int $userId): array
     {
@@ -105,6 +106,16 @@ class UserProduct extends Model
     {
         $this->product = $product;
     }
+
+    public function getTotal(): int
+    {
+        return $this->total;
+    }
+    public function setTotal(int $total): void
+    {
+        $this->total = $total;
+    }
+
 
 
 

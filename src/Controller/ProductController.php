@@ -32,7 +32,7 @@ class ProductController extends BaseController
 
     public function catalog()
     {
-        $this->authService->startSession();
+
         if ($this->authService->check()) {
             $products = $this->productModel->getByCatalog();
             require_once '../Views/catalog_page.php';
@@ -43,7 +43,6 @@ class ProductController extends BaseController
     }
     public function addProduct()
     {
-        $this->authService->startSession();
 
         if (!$this->authService->check()) {
             header('Location: login');
@@ -68,7 +67,6 @@ class ProductController extends BaseController
 
     public function decreaseProduct()
     {
-        $this->authService->startSession();
 
         if (!$this->authService->check()) {
             header('Location: login.php');
@@ -116,7 +114,6 @@ class ProductController extends BaseController
 
     public function getProductReviews()
     {
-        $this->authService->startSession();
         if (!$this->authService->check()) {
             header('Location: login');
             exit;
@@ -124,24 +121,28 @@ class ProductController extends BaseController
         $productId = (int) $_POST['product_id'];
         $products = $this->productModel->getByProduct($productId);
         $reviews = $this->reviewModel->getReviews($productId);
+
         $averageRating = (float) $this->reviewModel->getAverageRating($productId);
+
+
         require_once '../Views/reviews_page.php';
     }
     public function addReviews()
     {
-        $this->authService->startSession();
         if (!$this->authService->check()) {
-            header('Location: login');
+            header("ocation: login");
             exit;
         }
         $errors = $this->reviewValidate($_POST);
         if (empty($errors)) {
+
             $user = $this->authService->getCurrentUser();
-            $userId = $user->getId();
             $productId = $_POST['product_id'];
             $rating = $_POST['rating'];
             $comment = $_POST['comment'];
-            $review = $this->reviewModel->addReview($user->getId(), $productId, $rating, $comment);
+            $review = $this->reviewModel->addReview($productId, $user->getId(), $rating, $comment);
+           /* header("Location: /product");
+            exit();*/
         }
         $this->getProductReviews();
     }

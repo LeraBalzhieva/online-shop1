@@ -33,12 +33,23 @@ class CartController extends BaseController
             $user = $this->authService->getCurrentUser();
             $userProducts = $this->cartModel->getAllByUserId($user->getId());
 
+            $totalOrderSum = 0;
+
             foreach ($userProducts as $userProduct) {
                 $productId = $userProduct->getProductId();
                 $product = $this->productModel->getByProduct($productId);
                 $userProduct->setProduct($product);
+
+                // стоимость текущего продукта
                 $totalSum = $userProduct->getAmount() * $userProduct->getProduct()->getPrice();
+
+                // сумма текущего продукта
+                $userProduct->setTotal($totalSum);
+
+                // Добавление стоимости текущего продукта к общей сумме
+                $totalOrderSum += $totalSum;
             }
+            $newUserProducts = $userProducts;
             require_once '../Views/cart_page.php';
         }
     }
