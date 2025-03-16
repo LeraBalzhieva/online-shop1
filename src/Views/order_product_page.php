@@ -1,6 +1,6 @@
 <div class="container">
 
-        <li class="nav-item"><a class="nav-link active" href="/catalog">Каталог</a></li>
+    <li class="nav-item"><a class="nav-link active" href="/catalog">Каталог</a></li>
 
 
     <h3 class="text-center">Ваши заказы:</h3>
@@ -8,7 +8,7 @@
     <?php foreach ($userOrders as $newUserOrder): ?>
         <div class="card mb-4">
             <div class="card-body">
-                <h2 class="card-title">Заказ номер: <?php echo $newUserOrder->getId()?></h2>
+                <h2 class="card-title">Заказ номер: <?php echo $newUserOrder->getId() ?></h2>
                 <p class="card-text"><strong>Имя:</strong> <?php echo $newUserOrder->getName(); ?></p>
                 <p class="card-text"><strong>Номер телефона:</strong> <?php echo $newUserOrder->getPhone(); ?></p>
                 <p class="card-text"><strong>Город:</strong> <?php echo $newUserOrder->getCity(); ?></p>
@@ -18,14 +18,18 @@
                 <?php foreach ($newUserOrder->getOrderProducts() as $orderProduct): ?>
                     <div class="product-item">
                         <h4 class="mt-4">Список продуктов:</h4>
-                        <p class="card-text"><strong>Название продукта:</strong> <?php echo $orderProduct->getProduct()->getName(); ?></p>
-                        <p class="card-text"><strong>Цена:</strong> <?php echo $orderProduct->getProduct()->getPrice(); ?> р</p>
-                        <p class="card-text"><strong>Количество:</strong> <?php echo $orderProduct->getAmount(); ?> шт</p>
+                        <p class="card-text"><strong>Название
+                                продукта:</strong> <?php echo $orderProduct->getProduct()->getName(); ?></p>
+                        <p class="card-text">
+                            <strong>Цена:</strong> <?php echo $orderProduct->getProduct()->getPrice(); ?> р</p>
+                        <p class="card-text"><strong>Количество:</strong> <?php echo $orderProduct->getAmount(); ?> шт
+                        </p>
                     </div>
                 <?php endforeach; ?>
 
                 <hr>
-                <p class="font-weight-bold">Общая сумма заказа: <span class="total-price"><?php echo $newUserOrder->getTotal(); ?> р</span></p>
+                <p class="font-weight-bold">Общая сумма заказа: <span
+                            class="total-price"><?php echo $newUserOrder->getTotal(); ?> р</span></p>
             </div>
         </div>
     <?php endforeach; ?>

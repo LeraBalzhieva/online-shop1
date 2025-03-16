@@ -1,4 +1,3 @@
-
 <a href="/catalog">Назад в каталог</a>
 <div class="product-info">
     <h2>О продукте</h2>
@@ -18,7 +17,7 @@
             <p>Автор: </p>
             <p>Дата и время добавления отзыва: <?php if (isset($review)) echo $review->getCreatedAt(); ?></p>
             <p>Комментарий: <?php if (isset($review)) echo $review->getComment(); ?></p>
-<hr>
+            <hr>
             <p></p>
         </div>
     <?php endforeach; ?>
@@ -28,7 +27,7 @@
 
 <h2>Оставить отзыв</h2>
 <form method="post" action="/review">
-    <input type="hidden" name="product_id" value="<?php if (isset($products))echo $products->getId(); ?>"/>
+    <input type="hidden" name="product_id" value="<?php if (isset($products)) echo $products->getId(); ?>"/>
 
     <label for="rating">Оценка:</label>
     <select name="rating" id="rating">

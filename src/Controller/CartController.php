@@ -2,17 +2,20 @@
 
 namespace Controller;
 
+use DTO\AddProductDTO;
+use DTO\DecreaseProductDTO;
 use Model\UserProduct;
 use Model\Product;
-use Service\AuthService;
+use Request\AddProductRequest;
+use Request\DecreaseProductRequest;
 use Service\CartService;
-
 
 class CartController extends BaseController
 {
     private UserProduct $cartModel;
     private Product $productModel;
     private CartService $productService;
+
     public function __construct()
     {
         parent::__construct();
@@ -28,7 +31,6 @@ class CartController extends BaseController
 
     public function getCart()
     {
-
         if (!$this->authService->check()) {
             header('Location: login');
             exit();
@@ -57,15 +59,14 @@ class CartController extends BaseController
         }
     }
 
-    public function addProduct()
+    public function addProduct(AddProductRequest $request)
     {
         if ($this->authService->check()) {
             $user = $this->authService->getCurrentUser();
-            $productId = $_POST['product_id'];
-            $amount = 1;
-            $errors = $this->validateProduct($_POST);
+            $errors = $request->validate();
             if (empty($errors)) {
-                $this->productService->addProduct($productId, $user->getId(), $amount);
+                $dto = new AddProductDTO($request->getProductId(), $user, $request->getAmount());
+                $this->productService->addProduct($dto);
             }
             header('Location: catalog');
             exit;
@@ -74,39 +75,20 @@ class CartController extends BaseController
             exit();
         }
     }
-
-    public function decreaseProduct()
+    public function decreaseProduct(DecreaseProductRequest $request)
     {
         if (!$this->authService->check()) {
-            header('Location: login.php');
+            header('Location: login');
             exit;
         }
         $user = $this->authService->getCurrentUser();
-        $productId = $_POST['product_id'];
-        $this->productService->decreaseProduct($productId, $user->getId());
+        $errors = $request->validate();
+        if (empty($errors)) {
+            $dto = new DecreaseProductDTO($request->getProductId(), $user, $request->getAmount());
+            $this->productService->decreaseProduct($dto);
+        }
         header("Location: /catalog");
         exit();
     }
-    private function validateProduct(array $data): array
-    {
-        $errors = [];
-
-        if (isset($data['product_id'])) {
-            $productId = (int)$data['product_id'];
-
-            $product = $this->productModel->getByProduct($productId);
-
-            if ($product === false) {
-                $errors['product_id'] = "Продукт не найден";
-            }
-            if ($productId < 1) {
-                $errors['product_id'] = "Id не может быть отрицательным";
-            }
-        } else {
-            $errors['product_id'] = "Строка должна быть заполнена";
-        }
-        return $errors;
-    }
-
 }
 

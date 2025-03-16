@@ -3,16 +3,14 @@
 namespace Controller;
 
 use Model\Product;
-use Model\UserProduct;
 use Model\Review;
-use Service\CartService;
+use Request\AddProductRequest;
+use Request\AddReviewRequest;
 
 class ProductController extends BaseController
 {
     private Review $reviewModel;
     private Product $productModel;
-
-
     public function __construct()
     {
         parent::__construct();
@@ -20,7 +18,6 @@ class ProductController extends BaseController
         $this->productModel = new Product();
 
     }
-
     public function getCatalog()
     {
         require_once '../Views/catalog_page.php';
@@ -30,7 +27,6 @@ class ProductController extends BaseController
     {
         require_once '../Views/add_product_form.php';
     }
-
     public function catalog()
     {
         if ($this->authService->check()) {
@@ -41,7 +37,6 @@ class ProductController extends BaseController
             exit();
         }
     }
-
     public function getProductReviews()
     {
         if (!$this->authService->check()) {
@@ -51,42 +46,27 @@ class ProductController extends BaseController
         $productId = (int)$_POST['product_id'];
         $products = $this->productModel->getByProduct($productId);
         $reviews = $this->reviewModel->getReviews($productId);
-
         $averageRating = (float)$this->reviewModel->getAverageRating($productId);
-
-
         require_once '../Views/reviews_page.php';
     }
-
-    public function addReviews()
+    public function addReviews(AddReviewRequest $request)
     {
         if (!$this->authService->check()) {
-            header("ocation: login");
+            header("Location: login");
             exit;
         }
-        $errors = $this->reviewValidate($_POST);
+        $errors = $request->validate();
         if (empty($errors)) {
 
             $user = $this->authService->getCurrentUser();
-            $productId = $_POST['product_id'];
-            $rating = $_POST['rating'];
-            $comment = $_POST['comment'];
-            $review = $this->reviewModel->addReview($productId, $user->getId(), $rating, $comment);
-            /* header("Location: /product");
-             exit();*/
+
+            $review = $this->reviewModel->addReview(
+                $request->getProductId(),
+                $user->getId(),
+                $request->getRating(),
+                $request->getComment());
         }
         $this->getProductReviews();
     }
 
-    private function reviewValidate(array $data): array
-    {
-        $errors = [];
-        if (isset($data['comment'])) {
-            $reviewComment = $data['comment'];
-            if (strlen($reviewComment) < 2 || strlen($reviewComment) > 255) {
-                $errors['comment'] = 'Длина строки должна быть больше 2 и меньше 255';
-            }
-        }
-        return $errors;
-    }
 }

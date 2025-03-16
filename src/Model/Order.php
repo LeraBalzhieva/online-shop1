@@ -20,20 +20,19 @@ class Order extends Model
         return 'orders';
     }
 
-
-    public function addOrder(string $name,  string $phone, string $city,  string $address, int $userId, string $comment)
+    public function create(string $name,  string $phone, string $city,  string $address, string $comment, int $userId)
     {
         $stmt = $this->pdo->prepare(
-            "INSERT INTO {$this->getTableName()} (name, phone, city, address, user_id, comment)
-                    VALUES (:name, :phone, :city, :address, :user_id, :comment) RETURNING id"
+            "INSERT INTO {$this->getTableName()} (name, phone, city, address, comment, user_id)
+                    VALUES (:name, :phone, :city, :address, :comment, :user_id) RETURNING id"
         );
         $stmt->execute([
             'name' => $name,
             'address' => $address,
             'city' => $city,
             'phone' => $phone,
-            'user_id' => $userId,
-            'comment' => $comment
+            'comment' => $comment,
+            'user_id' => $userId
         ]);
         $result = $stmt->fetch();
         return $result['id'];

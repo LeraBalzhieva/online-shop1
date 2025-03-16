@@ -3,6 +3,10 @@
 namespace Controller;
 
 use Model\User;
+use Request\EditProfileRequest;
+use Request\LoginRequest;
+use Request\RegistrateRequest;
+
 class UserController extends BaseController
 {
     public function getRegistrate()
@@ -32,82 +36,29 @@ class UserController extends BaseController
     }
 
     //Регистрация
-    public function registrate()
+    public function registrate(RegistrateRequest $request)
     {
-        $errors = $this->validateByUser($_POST);
+        $errors = $request->validate();
 
         if (empty($errors)) {
-            $name = $_POST['name'];
-            $email = $_POST['mail'];
-            $password = $_POST['psw'];
-            $passwordRepeat = $_POST['psw-repeat'];
-            $photo = $_POST['photo'];
-            $password = password_hash($password, PASSWORD_DEFAULT);
-
-            $user = $this->userModel->addUser($name, $email, $password, $photo);
-            $user = $this->userModel->getByEmail($email);
+            $password = password_hash($request->getPassword(), PASSWORD_DEFAULT);
+            $this->userModel->addUser($request->getName(), $request->getEmail(), $password, $request->getPhoto());
+            header('Location: /catalog');
+            exit();
         }
         require_once '../Views/registration_form.php';
     }
 
-    // Валидация изера при регистрации
-    private function validateByUser(array $data): array
+    public function login(LoginRequest $request)
     {
-        $errors = [];
-// объявление и валидация данных
-        if (isset($data['name'])) {
-            $name = $data['name'];
-            if (strlen($name) < 3) {
-                $errors['name'] = "Имя не может содержать меньше 3 символов";
-            }
-        } else {
-            $errors['name'] = "Имя должно быть заполнено";
-        }
-
-        if (isset($data['mail'])) {
-            $email = $data['mail'];
-            if (strlen($email) < 3) {
-                $errors['email'] = "Email не может содержать меньше 3 символов";
-            } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                $errors['email'] = "Некорректный email";
-            } else {
-
-
-                $user = $this->userModel->getByEmail($email);
-
-                if ($user !== false) {
-                    $errors['email'] = "Этот Email уже зарегестрирован!";
-                }
-            }
-        } else {
-            $errors['email'] = "Email должен быть заполнен";
-        }
-// проверка совпадения паролей
-        if (isset($data['psw'])) {
-            $password = $data['psw'];
-            if (strlen($password) < 3) {
-                $errors['psw'] = "Пароль не может содержать меньше 3 символов";
-            }
-            $passwordRepeat = $data["psw-repeat"];
-            if ($password !== $passwordRepeat) {
-                $errors['psw-repeat'] = "Пароли не совпадают!";
-            }
-        } else {
-            $errors['psw'] = "Пароль должен быть заполнен!";
-        }
-        return $errors;
-    }
-
-    public function login()
-    {
-        $errors = $this->validateByLogin($_POST);
+        $errors = $request->validate();
         // если нет ошибок, подключаемся к БД
         if (empty($errors)) {
 
-            $result = $this->authService->auth($_POST['username'], $_POST['password']);
+            $result = $this->authService->auth($request->getUsername(), $request->getPassword());
 
             if ($result) {
-                header("Location: /catalog");
+                header("Location: catalog");
                 exit();
 
             } else {
@@ -116,20 +67,6 @@ class UserController extends BaseController
         }
         require_once '../Views/login_form.php';
     }
-
-    private function validateByLogin(array $data): array
-    {
-        $errors = [];
-        // проверка наличия переменных
-        if (isset($date['username'])) {
-            $errors['username'] = "Поле Username обязательно для заполнения!";
-        }
-        if (isset($date['password'])) {
-            $errors['password'] = "Поле Password обязательно для заполнения!";
-        }
-        return $errors;
-    }
-
     //выдача профиля
     public function profile()
     {
@@ -142,61 +79,28 @@ class UserController extends BaseController
         }
     }
 
-    //валиядация при изменении профиля
-    private function validateProfile(array $data): array
-    {
-        $errors = [];
-
-        if (isset($data['name'])) {
-            $name = $data['name'];
-            if (strlen($name) < 3) {
-                $errors['name'] = "Имя не может содержать меньше 3 символов";
-            }
-        }
-        if (isset($data['mail'])) {
-            $email = $data['mail'];
-            if (strlen($email) < 3) {
-                $errors['email'] = "Email не может содержать меньше 3 символов";
-            } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                $errors['email'] = "Некорректный email";
-            } else {
-
-                $user = $this->userModel->getByEmail($email);
-
-                $userId = $_SESSION['userId'];
-                if ($user->getId() !== $userId) {
-                    $errors['email'] = "Этот Email уже зарегестрирован!";
-                }
-            }
-        }
-        return $errors;
-    }
-
 // изменение данных на странице профиля
-    public function editProfile()
+    public function editProfile(EditProfileRequest $request)
     {
-
         if (!$this->authService->check()) {
-            header('Location: ../login.php');
+            header('Location: login');
             exit;
         }
-
-        $errors = $this->validateProfile($_POST);
+        $user = $this->authService->getCurrentUser();
+        $errors = $request->validate();
 
         if (empty($errors)) {
-            $name = $_POST['name'];
-            $email = $_POST['mail'];
-            $user = $this->authService->getCurrentUser();
+
 
             $user = $this->userModel->verification($user->getId());
 
-            if ($user->getName() !== $name) {
-                $this->userModel->updateNamedByID($name, $user->getId());
+            if ($user->getName() !== $request->getName()) {
+                $this->userModel->updateNamedByID($request->getName(), $user->getId());
             }
-            if ($user->getEmail() !== $email) {
-                $this->userModel->updateEmailByID($email, $user->getId());
+            if ($user->getEmail() !== $request->getEmail()) {
+                $this->userModel->updateEmailByID($request->getEmail(), $user->getId());
             }
-            header('Location: /profile');
+            header('Location: profile');
             exit;
         }
         require_once '../Views/edit_profile_form.php';

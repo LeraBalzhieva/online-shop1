@@ -60,6 +60,7 @@
         </span>
                 </h4>
                 <div class="card-deck">
+                    <?php if (!empty($userProducts)): ?>
                     <?php foreach ($userProducts as $userProduct): ?>
                         <div class="card text-center">
 
@@ -79,7 +80,9 @@
 
                     <?php endforeach; ?>
                     <h3 class="card-title"> <?php echo "ОБЩИЙ ИТОГ:" . $total . "p"; ?></h3>
-
+                <?php else: ?>
+                    <p>Заполните корректно форму.</p>
+                <?php endif; ?>
                 </div>
             </div>
             <button type="submit" value="Оформить заказ" class="btn">Оформить заказ</button>

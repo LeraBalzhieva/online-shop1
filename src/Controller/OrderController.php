@@ -1,11 +1,12 @@
 <?php
 
 namespace Controller;
+use DTO\OrderCreateDTO;
 use Model\OrderProduct;
 use Model\Order;
 use Model\Product;
 use Model\UserProduct;
-use Service\AuthService;
+use Request\OrderRequest;
 use Service\OrderService;
 
 class OrderController extends BaseController
@@ -15,7 +16,6 @@ class OrderController extends BaseController
     private Product $productModel;
     private OrderProduct $orderProductModel;
     private OrderService $orderService;
-
 
     public function __construct()
     {
@@ -31,85 +31,35 @@ class OrderController extends BaseController
         require_once '../Views/order_page.php';
     }
 
-    public function order()
+    public function order(OrderRequest $request)
     {
-        $this->authService->startSession();
-
         if (!$this->authService->check()) {
-            header("Location: ../login");
+            header("Location: login");
             exit();
         }
 
-        $errors = $this->validateByOrder($_POST);
+        $errors = $request->validate();
 
         if (empty($errors)) {
+
             $user = $this->authService->getCurrentUser();
-            $name = $_POST['name'];
-            $phone = $_POST['phone'];
-            $city = $_POST['city'];
-            $address = $_POST['address'];
-            $comment = $_POST['comment'];
-
-            $orderId = $this->orderModel->addOrder($name, $phone, $city, $address, $user->getId(), $comment);
-
-            $this->orderService->order($user->getId(), $orderId);
-
+            $dto = new OrderCreateDTO(
+                $request['name'],
+                $request['phone'],
+                $request['city'],
+                $request['address'],
+                $request['comment'],
+                $user);
+            $this->orderService->create($dto);
             header("Location: /order");
             exit();
-
         } else {
             require_once '../Views/order_page.php';
         }
-
-    }
-
-    private function validateByOrder(array $data): array
-    {
-        $errors = [];
-
-        if (isset($data['name'])) {
-            $name = $data['name'];
-            if (strlen($name) < 3) {
-                $errors['name'] = "Имя не может содержать меньше 3 символов";
-            }
-        } else {
-            $errors['name'] = "Имя должно быть заполнено";
-        }
-
-
-        if (isset($data['phone'])) {
-            $phone = $data['phone'];
-            if (strlen($phone < 5)) {
-                $errors['phone'] = "Введите корректный номер телефона";
-            }
-        } else {
-            $errors['phone'] = "Поле должно быть заполнено";
-        }
-
-        if (isset($data['city'])) {
-            $city = $data['city'];
-            if (strlen($city) < 3) {
-                $errors['city'] = "Введите правильный город";
-            }
-        } else {
-            $errors['city'] = "Поле должно быть заполнено";
-        }
-
-        if (isset($data['address'])) {
-            $address = $data['address'];
-            if (strlen($address) < 3) {
-                $errors['address'] = "Введите правильный адрес";
-            }
-        } else {
-            $errors['address'] = "Поле должно быть заполнено";
-        }
-        return $errors;
     }
 
     public function getOrderProduct()
     {
-        $this->authService->startSession();
-
         if (!$this->authService->check()) {
             header('Location: ../login');
             exit();
@@ -129,11 +79,8 @@ class OrderController extends BaseController
             require_once '../Views/order_page.php';
         }
     }
-
     public function getAllOrders()
     {
-        $this->authService->startSession();
-
         if (!$this->authService->check()) {
             header("Location: ../login");
             exit();
@@ -162,11 +109,8 @@ class OrderController extends BaseController
             $userOrder->setTotal($totalSum);
             $newUserOrders[] = $userOrder;
         }
-
         require_once '../Views/order_product_page.php';
     }
-
-
 }
 
 

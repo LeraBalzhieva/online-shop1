@@ -33,14 +33,14 @@ class User extends Model
         return $obj;
     }
 
-    public function updateEmailByID(string $email, int $userId)
+    public function updateEmailByID(string $email, int $userId): void
     {
 
-        $stmt = $this->pdo->prepare("UPDATE {$this->getTableName()} SET name = :name WHERE id = $userId");
-        $stmt->execute([':name' => $email]);
+        $stmt = $this->pdo->prepare("UPDATE {$this->getTableName()} SET email = :email WHERE id = $userId");
+        $stmt->execute([':email' => $email]);
     }
 
-    public function updateNamedByID(string $name, int $userId)
+    public function updateNamedByID(string $name, int $userId): void
     {
         $stmt = $this->pdo->prepare("UPDATE {$this->getTableName()} SET name = :name WHERE id = $userId");
         $stmt->execute([':name' => $name]);

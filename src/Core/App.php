@@ -20,9 +20,16 @@ class App
                 $method = $handler['method'];
 
                 $controller = new $class();
-                $controller->$method();
+
+                $requestClass = $handler['request'];
+                if ($requestClass !== null) {
+                    $request = new $requestClass($_POST);
+                    $controller->$method($request);
+                } else {
+                    $controller->$method();
+                }
             } else {
-                echo "$requestMethod не поддеривается для $requestUri";
+                echo "$requestMethod не поддерживается для $requestUri";
             }
         } else {
             http_response_code(404);
@@ -30,21 +37,24 @@ class App
         }
     }
 
-    public function get(string $route, string $className, string $method)
+    public function get(string $route, string $className, string $method, $requestClass = null)
     {
         $this->routes[$route]['GET'] = [
             'class' => $className,
             'method' => $method,
+            'request' => $requestClass
         ];
     }
 
-    public function post(string $route, string $className, string $method)
+    public function post(string $route, string $className, string $method, $requestClass = null)
     {
         $this->routes[$route]['POST'] = [
             'class' => $className,
             'method' => $method,
+            'request' => $requestClass
         ];
     }
+
     public function put(string $route, string $className, string $method)
     {
         $this->routes[$route]['POST'] = [
@@ -52,6 +62,7 @@ class App
             'method' => $method,
         ];
     }
+
     public function delete(string $route, string $className, string $method)
     {
         $this->routes[$route]['POST'] = [

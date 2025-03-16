@@ -1,6 +1,7 @@
 <?php
-
-session_start();
+if (session_status() !== PHP_SESSION_ACTIVE) {
+    session_start();
+}
 if (isset($_SESSION['userId'])) {
     $userId = $_SESSION['userId'];
 
@@ -8,7 +9,7 @@ if (isset($_SESSION['userId'])) {
     $stmt = $pdo->query("SELECT * FROM users WHERE id = $userId");
     $user = $stmt->fetch();
 } else {
-    header("Location: login.php");
+    header("Location: login");
 }?>
 
 <form action="editProfile" method="POST" class="form-example">

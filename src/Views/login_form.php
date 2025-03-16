@@ -11,6 +11,7 @@
             <label style="color: red"><?php echo $errors['password'];?></label>
         <?php endif; ?>
       <button>login</button>
+        <li class="active"><a href="/registration">Регистрация</a></li>
       <p class="message">Not registered? <a href="#">Create an account</a></p>
     </form>
   </div>
