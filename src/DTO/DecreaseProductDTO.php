@@ -7,24 +7,13 @@ use Model\User;
 class DecreaseProductDTO
 {
     public function __construct(
-        private string $productId,
-        private User   $user,
-        private int    $amount,
+        private int $productId,
     )
     {
     }
-    public function getProductId(): string
+    public function getProductId(): int
     {
         return $this->productId;
     }
 
-    public function getUser(): User
-    {
-        return $this->user;
-    }
-
-    public function getAmount(): int
-    {
-        return $this->amount;
-    }
 }

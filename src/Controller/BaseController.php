@@ -2,13 +2,14 @@
 
 namespace Controller;
 
-use Service\AuthService;
+use Service\Auth\AuthInterface;
+use Service\Auth\AuthSessionService;
 
 abstract class BaseController
 {
-    protected AuthService $authService;
+    protected AuthInterface $authService;
     public function __construct()
     {
-        $this->authService = new AuthService();
+        $this->authService = new AuthSessionService();
     }
 }

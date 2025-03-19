@@ -16,7 +16,6 @@ class ProductController extends BaseController
         parent::__construct();
         $this->reviewModel = new Review();
         $this->productModel = new Product();
-
     }
     public function getCatalog()
     {
@@ -68,5 +67,4 @@ class ProductController extends BaseController
         }
         $this->getProductReviews();
     }
-
 }

@@ -39,7 +39,7 @@ $app->post('/decrease-product', CartController::class, 'decreaseProduct', Reques
 $app->get('/cart', CartController:: class, 'getCart');
 $app->post('/cart', CartController::class, 'getCartPage');
 
-$app->get('/order',OrderController:: class, 'getOrderProduct');
+$app->get('/order',CartController:: class, 'getUserProducts');
 $app->post('/order',OrderController::class, 'order', Request\OrderRequest::class);
 
 $app->get('/orderProduct', OrderController:: class, 'getAllOrders');

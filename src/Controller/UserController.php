@@ -13,17 +13,14 @@ class UserController extends BaseController
     {
         require_once '../Views/registration_form.php';
     }
-
     public function getLogin()
     {
         require_once '../Views/login_form.php';
     }
-
     public function getProfile()
     {
         require_once '../Views/profile_page.php';
     }
-
     public function getEditProfile()
     {
         require_once '../Views/edit_profile_form.php';
@@ -34,12 +31,10 @@ class UserController extends BaseController
         parent::__construct();
         $this->userModel = new User();
     }
-
     //Регистрация
     public function registrate(RegistrateRequest $request)
     {
         $errors = $request->validate();
-
         if (empty($errors)) {
             $password = password_hash($request->getPassword(), PASSWORD_DEFAULT);
             $this->userModel->addUser($request->getName(), $request->getEmail(), $password, $request->getPhoto());
@@ -48,7 +43,6 @@ class UserController extends BaseController
         }
         require_once '../Views/registration_form.php';
     }
-
     public function login(LoginRequest $request)
     {
         $errors = $request->validate();
@@ -78,7 +72,6 @@ class UserController extends BaseController
             require_once '../Views/profile_page.php';
         }
     }
-
 // изменение данных на странице профиля
     public function editProfile(EditProfileRequest $request)
     {
@@ -90,7 +83,6 @@ class UserController extends BaseController
         $errors = $request->validate();
 
         if (empty($errors)) {
-
 
             $user = $this->userModel->verification($user->getId());
 
@@ -105,7 +97,6 @@ class UserController extends BaseController
         }
         require_once '../Views/edit_profile_form.php';
     }
-
     public function logout()
     {
         $this->authService->logout();

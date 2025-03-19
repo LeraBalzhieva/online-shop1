@@ -11,13 +11,12 @@ class AddProductRequest
     public function __construct(private array $data)
     {
         $this->productModel = new Product();
-
     }
     public function getProductId(): int
     {
-        return $this->data['productId'];
+        return $this->data['product_id'];
     }
-    public function getAmount(): string
+    public function getAmount(): int
     {
         return $this->data['amount'];
     }
@@ -25,7 +24,7 @@ class AddProductRequest
     {
         $errors = [];
 
-        if (isset($his->data['product_id'])) {
+        if (isset($this->data['product_id'])) {
             $productId = (int)$this->data['product_id'];
 
             $product = $this->productModel->getByProduct($productId);

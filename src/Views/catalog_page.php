@@ -19,10 +19,14 @@
                 </div>
                 <div class="card-footer">
                     <strong><?php echo "Цена: " . $product->getPrice() . " р"; ?></strong>
+                    <strong><?php echo "количество: " ." шт"; ?></strong>
                     <div class="btn-group">
+
                         <form action="/add-product" method="POST" class="d-inline">
                             <input type="hidden" name="product_id" value="<?php echo $product->getId(); ?>">
+                            <input type="hidden" name="amount" value="1">
                             <button type="submit" class="btn btn-success">+</button>
+
 
                         </form>
                         <form action="/decrease-product" method="POST" class="d-inline">
@@ -31,7 +35,6 @@
                         </form>
                     </div>
                 </div>
-
 
                 <form action="/product" method="POST">
                     <input type="hidden" name="product_id" value="<?php echo $product->getId(); ?>">

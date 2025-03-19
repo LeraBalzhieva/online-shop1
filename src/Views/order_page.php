@@ -7,46 +7,46 @@
 
                 <li class="active"><a href="/cart">Назад в корзину</a></li>
                 <li class="active"><a href="/catalog">Назад в каталог</a>
-                <div class="row">
-                    <div class="col-50">
-                        <h3>Введите данные:</h3>
-                        <label for="name"><i class="fa fa-user"></i> ФИО</label>
-                        <?php if (isset($errors['name'])): ?>
-                            <label style="color: red"><?php echo $errors['name']; ?></label>
-                        <?php endif; ?>
-                        <input type="text" id="name" name="name">
+                    <div class="row">
+                        <div class="col-50">
+                            <h3>Введите данные:</h3>
+                            <label for="name"><i class="fa fa-user"></i> ФИО</label>
+                            <?php if (isset($errors['name'])): ?>
+                                <label style="color: red"><?php echo $errors['name']; ?></label>
+                            <?php endif; ?>
+                            <input type="text" id="name" name="name">
 
 
-                        <label for="phone"><i class="fa fa-envelope"></i> Phone</label>
-                        <?php if (isset($errors['phone'])): ?>
-                            <label style="color: red"><?php echo $errors['phone']; ?></label>
-                        <?php endif; ?>
-                        <input type="text" id="phone" name="phone">
+                            <label for="phone"><i class="fa fa-envelope"></i> Phone</label>
+                            <?php if (isset($errors['phone'])): ?>
+                                <label style="color: red"><?php echo $errors['phone']; ?></label>
+                            <?php endif; ?>
+                            <input type="text" id="phone" name="phone">
 
 
-                        <label for="city"><i class="fa fa-institution"></i> Город</label>
-                        <?php if (isset($errors['city'])): ?>
-                            <label style="color: red"><?php echo $errors['city']; ?></label>
-                        <?php endif; ?>
-                        <input type="text" id="city" name="city">
+                            <label for="city"><i class="fa fa-institution"></i> Город</label>
+                            <?php if (isset($errors['city'])): ?>
+                                <label style="color: red"><?php echo $errors['city']; ?></label>
+                            <?php endif; ?>
+                            <input type="text" id="city" name="city">
 
 
-                        <label for="adr"><i class="fa fa-address-card-o"></i> Адрес</label>
-                        <?php if (isset($errors['address'])): ?>
-                            <label style="color: red"><?php echo $errors['address']; ?></label>
-                        <?php endif; ?>
-                        <input type="text" id="adr" name="address">
+                            <label for="adr"><i class="fa fa-address-card-o"></i> Адрес</label>
+                            <?php if (isset($errors['address'])): ?>
+                                <label style="color: red"><?php echo $errors['address']; ?></label>
+                            <?php endif; ?>
+                            <input type="text" id="adr" name="address">
 
-                        <label for="comment"><i class="fa fa-envelope"></i> comment</label>
-                        <?php if (isset($errors['comment'])): ?>
-                            <label style="color: red"><?php echo $errors['comment']; ?></label>
-                        <?php endif; ?>
-                        <input type="text" id="comment" name="comment">
+                            <label for="comment"><i class="fa fa-envelope"></i> comment</label>
+                            <?php if (isset($errors['comment'])): ?>
+                                <label style="color: red"><?php echo $errors['comment']; ?></label>
+                            <?php endif; ?>
+                            <input type="text" id="comment" name="comment">
 
+
+                        </div>
 
                     </div>
-
-                </div>
 
             </div>
         </div>
@@ -61,34 +61,36 @@
                 </h4>
                 <div class="card-deck">
                     <?php if (!empty($userProducts)): ?>
-                    <?php foreach ($userProducts as $userProduct): ?>
-                        <div class="card text-center">
+                    <?php foreach ($userProducts
 
-                            <pre></pre>
-                            <img class="card-img-top" src="<?php echo $userProduct->getProduct()->getImage(); ?>" alt="Card image">
-                            <div class="card-body">
+                    as $userProduct): ?>
+                    <div class="card text-center">
 
-                                <p class="card-text"><?php echo $userProduct->getPRoduct()->getName(); ?></p>
-                                <p class="card-text">Количество: <?php echo $userProduct->getAmount(); ?></p></a>
-                                <p class="card-text">Цена:<?php echo $userProduct->getProduct()->getPrice() . " р"; ?> </p>
+                        <pre></pre>
+                        <img class="card-img-top" src="<?php echo $userProduct->getProduct()->getImage(); ?>"
+                             alt="Card image">
+                        <div class="card-body">
+                            <p class="card-text"><?php echo $userProduct->getPRoduct()->getName(); ?></p>
+                            <p class="card-text">Количество: <?php echo $userProduct->getAmount(); ?></p></a>
+                            <p class="card-text">Цена:<?php echo $userProduct->getProduct()->getPrice() . " р"; ?> </p>
 
-                                </div>
-                            </div>
-                            <hr>
-                            </a>
                         </div>
+                    </div>
+                    <hr>
+                    </a>
+                </div>
 
-                    <?php endforeach; ?>
-                    <h3 class="card-title"> <?php echo "ОБЩИЙ ИТОГ:" . $total . "p"; ?></h3>
+                <?php endforeach; ?>
+                <h3 class="card-title"> <?php echo "ОБЩИЙ ИТОГ:" . $userProduct->getTotal() . "p"; ?></h3>
                 <?php else: ?>
                     <p>Заполните корректно форму.</p>
                 <?php endif; ?>
-                </div>
             </div>
-            <button type="submit" value="Оформить заказ" class="btn">Оформить заказ</button>
-
-
         </div>
+        <button type="submit" value="Оформить заказ" class="btn">Оформить заказ</button>
+
+
+    </div>
 
 
 </form>

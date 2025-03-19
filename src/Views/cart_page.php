@@ -6,6 +6,7 @@
 
     <h3>CART</h3>
     <div class="card-deck">
+        <?php if (!empty($userProducts)): ?>
         <?php foreach ($userProducts as $userProduct): ?>
             <div class="card text">
                 <img class="card-img-top" src="<?php echo $userProduct->getProduct()->getImage(); ?>" alt="Card image">
@@ -14,15 +15,20 @@
                     <p class="card-text"><?php echo $userProduct->getProduct()->getName(); ?></p>
                     <p class="card-text">Количество: <?php echo $userProduct->getAmount(); ?></p></a>
                     <p class="card-text">Цена:<?php echo $userProduct->getProduct()->getPrice() . " р"; ?> </p>
-                    <p class="card-text">Итого:<?php echo  $userProduct->getTotal(). " p"; ?> <br></p>
+                    <p class="card-text">Итого:<?php echo  $userProduct->getAmount()*$userProduct->getProduct()->getPrice() . " p"; ?> <br></p>
+                    <?php  ?>
                 </div>
                 </div>
                 <hr>
                 </a>
+
             </div>
         <?php endforeach; ?>
 
-    <h3>Общая сумма заказа: <?php echo $totalOrderSum ?> руб.</h3>
+    <h3>Общая сумма заказа: <?php echo $userProduct->getTotal() ?> руб.</h3>
+    <?php else: ?>
+    <p>Корзина пуста.</p>
+    <?php endif; ?>
 
 
 

@@ -14,9 +14,9 @@ class DecreaseProductRequest
     }
     public function getProductId(): int
     {
-        return $this->data['productId'];
+        return $this->data['product_id'];
     }
-    public function getAmount(): string
+    public function getAmount(): int
     {
         return $this->data['amount'];
     }
@@ -24,7 +24,7 @@ class DecreaseProductRequest
     {
         $errors = [];
 
-        if (isset($his->data['product_id'])) {
+        if (isset($this->data['product_id'])) {
             $productId = (int)$this->data['product_id'];
 
             $product = $this->productModel->getByProduct($productId);

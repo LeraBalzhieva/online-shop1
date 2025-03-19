@@ -45,12 +45,21 @@ CREATE TABLE orders
 CREATE TABLE order_products
 (
     id SERIAL PRIMARY KEY,
-    order_id int not null,
-    FOREIGN KEY (order_id) REFERENCES orders (id),
-    product_id int not null,
-    FOREIGN KEY (product_id) REFERENCES products (id),
+    order_id int not null REFERENCES orders,
+    product_id int not null REFERENCES products,
     amount int not null
 
 )
 
 CREATE UNIQUE INDEX ON order_products (order_id, product_id)
+
+CREATE TABLE reviews (
+                         id SERIAL PRIMARY KEY,
+                         product_id INT NOT NULL,
+                         user_id INT NOT NULL,
+                         rating INT,
+                         comment TEXT,
+                         created_at timestamp DEFAULT CURRENT_TIMESTAMP,
+                         FOREIGN KEY (product_id) REFERENCES products(id),
+                         FOREIGN KEY (user_id) REFERENCES users(id)
+);
