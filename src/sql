@@ -1,30 +1,35 @@
-CREATE TABLE users (
-                          id SERIAL PRIMARY KEY,
-                          name varchar not null,
-                          email varchar not null,
-                          password varchar not null
+CREATE TABLE users
+(
+    id       SERIAL PRIMARY KEY,
+    name     varchar not null,
+    email    varchar not null,
+    password varchar not null
 )
 
-ALTER TABLE users ADD UNIQUE (email);
+ALTER TABLE users
+    ADD UNIQUE (email);
 
-CREATE TABLE products (
+CREATE TABLE products
+(
     id          SERIAL PRIMARY KEY,
     name        varchar not null,
     description varchar,
     price       decimal not null
 )
 
-ALTER TABLE products ADD COLUMN image_url varchar;
+ALTER TABLE products
+    ADD COLUMN image_url varchar;
 
-ALTER TABLE users ADD COLUMN image_url varchar;
+ALTER TABLE users
+    ADD COLUMN image_url varchar;
 
 CREATE TABLE user_products
 (
     id         SERIAL PRIMARY KEY,
     user_id    int not null,
-    FOREIGN KEY (user_id)  REFERENCES users (id),
+    FOREIGN KEY (user_id) REFERENCES users (id),
     product_id int not null,
-    FOREIGN KEY (product_id)  REFERENCES products (id),
+    FOREIGN KEY (product_id) REFERENCES products (id),
     amount     int not null
 )
 
@@ -32,34 +37,44 @@ CREATE UNIQUE INDEX ON user_products (user_id, product_id);
 
 CREATE TABLE orders
 (
-    id SERIAL PRIMARY KEY,
-    name varchar not null,
-    phone varchar not null,
-    city varchar not null,
+    id      SERIAL PRIMARY KEY,
+    name    varchar not null,
+    phone   varchar not null,
+    city    varchar not null,
     address varchar not null,
     comment text,
-    user_id int null references users
+    user_id int     null references users
 
 )
 
 CREATE TABLE order_products
 (
-    id SERIAL PRIMARY KEY,
-    order_id int not null REFERENCES orders,
+    id         SERIAL PRIMARY KEY,
+    order_id   int not null REFERENCES orders,
     product_id int not null REFERENCES products,
-    amount int not null
+    amount     int not null
 
 )
 
 CREATE UNIQUE INDEX ON order_products (order_id, product_id)
 
-CREATE TABLE reviews (
-                         id SERIAL PRIMARY KEY,
-                         product_id INT NOT NULL,
-                         user_id INT NOT NULL,
-                         rating INT,
-                         comment TEXT,
-                         created_at timestamp DEFAULT CURRENT_TIMESTAMP,
-                         FOREIGN KEY (product_id) REFERENCES products(id),
-                         FOREIGN KEY (user_id) REFERENCES users(id)
+CREATE TABLE reviews
+(
+    id         SERIAL PRIMARY KEY,
+    product_id INT NOT NULL,
+    user_id    INT NOT NULL,
+    rating     INT,
+    comment    TEXT,
+    created_at timestamp DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (product_id) REFERENCES products (id),
+    FOREIGN KEY (user_id) REFERENCES users (id)
+);
+
+CREATE TABLE logs
+(
+    id      SERIAl PRIMARY KEY,
+    message TEXT,
+    file    VARCHAR(255),
+    line    INT,
+    date TIMESTAMP DEFAULT current_timestamp
 );

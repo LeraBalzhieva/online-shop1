@@ -1,6 +1,7 @@
 <?php
 
 namespace Core;
+use Service\Logger\DatabaseLoggerService;
 use Service\Logger\LoggerService;
 
 class App
@@ -33,7 +34,7 @@ class App
                         $controller->$method();
                     }
                 } catch (\Throwable $exception) {
-                    $loggerService = new LoggerService();
+                    $loggerService = new DatabaseLoggerService();
                     $loggerService->error($exception);
                     http_response_code(500);
                     require_once "../Views/500.php";

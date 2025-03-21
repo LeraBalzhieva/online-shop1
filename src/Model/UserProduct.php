@@ -28,7 +28,7 @@ class UserProduct extends Model
         return $results;
     }
 
-    public function getAllByUserId(int $userId): array
+   /* public function getAllByUserId(int $userId): array
     {
         $stmt = $this->pdo->prepare("SELECT * FROM {$this->getTableName()} WHERE user_id = :userId");
         $stmt->execute([':userId' => $userId]);
@@ -39,7 +39,7 @@ class UserProduct extends Model
             $results[] = $this->hydrate($product);
         }
         return $results;
-    }
+    }*/
 
 
     public function deleteByUserId(int $userId)
