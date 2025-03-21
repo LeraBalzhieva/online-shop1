@@ -32,10 +32,16 @@ class User extends Model
         $obj->image = $result["image_url"];
         return $obj;
     }
+    public function addUser(string $name, string $email, string $password, string $photo): array|false
+    {
+        $stmt = $this->pdo->prepare("INSERT INTO {$this->getTableName()} (name, email, password, image_url) VALUES (:name, :email, :password, :image_url)");
+        $stmt->execute([':name' => $name, ':email' => $email, ':password' => $password, 'image_url' => $photo]);
+        $result = $stmt->fetch();
+        return $result;
+    }
 
     public function updateEmailByID(string $email, int $userId): void
     {
-
         $stmt = $this->pdo->prepare("UPDATE {$this->getTableName()} SET email = :email WHERE id = $userId");
         $stmt->execute([':email' => $email]);
     }
@@ -46,13 +52,6 @@ class User extends Model
         $stmt->execute([':name' => $name]);
     }
 
-    public function addUser(string $name, string $email, string $password, string $photo): array|false
-    {
-        $stmt = $this->pdo->prepare("INSERT INTO {$this->getTableName()} (name, email, password, image_url) VALUES (:name, :email, :password, :image_url)");
-        $stmt->execute([':name' => $name, ':email' => $email, ':password' => $password, 'image_url' => $photo]);
-        $result = $stmt->fetch();
-        return $result;
-    }
 
     public function verification(int $userId)
     {

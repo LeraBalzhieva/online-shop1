@@ -1,6 +1,8 @@
 <?php
 
 namespace Core;
+use Service\Logger\LoggerService;
+
 class App
 {
     private array $routes = [];
@@ -22,11 +24,19 @@ class App
                 $controller = new $class();
 
                 $requestClass = $handler['request'];
-                if ($requestClass !== null) {
-                    $request = new $requestClass($_POST);
-                    $controller->$method($request);
-                } else {
-                    $controller->$method();
+
+                try {
+                    if ($requestClass !== null) {
+                        $request = new $requestClass($_POST);
+                        $controller->$method($request);
+                    } else {
+                        $controller->$method();
+                    }
+                } catch (\Throwable $exception) {
+                    $loggerService = new LoggerService();
+                    $loggerService->error($exception);
+                    http_response_code(500);
+                    require_once "../Views/500.php";
                 }
             } else {
                 echo "$requestMethod не поддерживается для $requestUri";

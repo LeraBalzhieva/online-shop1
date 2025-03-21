@@ -1,0 +1,25 @@
+Message: Call to undefined method Model\Product::getUserProduct()
+File: /var/www/html/src/Views/catalog_page.php
+Line: 22
+Date: 2025-03-19 16:01:26
+___________________________
+Message: Для оформления заказа сумма корзины должна быть больше 500р
+File: /var/www/html/src/Service/OrderService.php
+Line: 35
+Date: 2025-03-19 17:04:32
+___________________________
+Message: Для оформления заказа сумма корзины должна быть больше 500р
+File: /var/www/html/src/Service/OrderService.php
+Line: 35
+Date: 2025-03-20 11:21:49
+___________________________
+Message: Для оформления заказа сумма корзины должна быть больше 500р
+File: /var/www/html/src/Service/OrderService.php
+Line: 35
+Date: 2025-03-20 11:21:52
+___________________________
+Message: Для оформления заказа сумма корзины должна быть больше 500р
+File: /var/www/html/src/Service/OrderService.php
+Line: 35
+Date: 2025-03-20 11:23:02
+___________________________

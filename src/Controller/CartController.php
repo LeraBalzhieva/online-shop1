@@ -52,7 +52,7 @@ class CartController extends BaseController
                 $dto = new AddProductDTO($request->getProductId());
                 $this->cartService->addProduct($dto);
             }
-            header("Location: /catalog");
+            header("Location: /cart");
             exit;
         } else {
             header("Location: /login");
@@ -71,7 +71,7 @@ class CartController extends BaseController
             $dto = new DecreaseProductDTO($request->getProductId());
             $this->cartService->decreaseProduct($dto);
         }
-        header("Location: /catalog");
+        header("Location: /cart");
         exit();
     }
 }

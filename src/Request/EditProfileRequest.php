@@ -27,7 +27,6 @@ class EditProfileRequest
     public function validate(): array
     {
         $errors = [];
-
         // Проверка имени
         if (isset($this->data['name'])) {
             $name = $this->data['name'];
@@ -52,7 +51,6 @@ class EditProfileRequest
                 }
             }
         }
-
         return $errors;
     }
 }

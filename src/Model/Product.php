@@ -47,7 +47,7 @@ class Product extends Model
         return $this->hydrate($result);
 
     }
-    public function getImage(): string
+        public function getImage(): string
     {
         return $this->image;
     }

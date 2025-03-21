@@ -12,27 +12,29 @@
     <div class="product-table">
         <?php foreach ($products as $product): ?>
             <div class="card text-center mb-4">
-                <img class="card-img-top" src="<?php echo $product->getImage(); ?>" alt="<?php echo $product->getName(); ?>">
+                <img class="card-img-top" src="<?php echo $product->getImage(); ?>"
+                     alt="<?php echo $product->getName(); ?>">
                 <div class="card-body">
                     <h5 class="card-title"><?php echo $product->getName(); ?></h5>
                     <p class="card-text"><?php echo $product->getDescription(); ?></p>
                 </div>
                 <div class="card-footer">
                     <strong><?php echo "Цена: " . $product->getPrice() . " р"; ?></strong>
-                    <strong><?php echo "количество: " ." шт"; ?></strong>
+
+
                     <div class="btn-group">
 
                         <form action="/add-product" method="POST" class="d-inline">
                             <input type="hidden" name="product_id" value="<?php echo $product->getId(); ?>">
                             <input type="hidden" name="amount" value="1">
-                            <button type="submit" class="btn btn-success">+</button>
+                            <button type="submit">Добавить в корзину</button>
 
 
-                        </form>
+                            <!--     </form>
                         <form action="/decrease-product" method="POST" class="d-inline">
-                            <input type="hidden" name="product_id" value="<?php echo $product->getId(); ?>">
+                            <input type="hidden" name="product_id" value="<?php /*echo $product->getId(); */ ?>">
                             <button type="submit" class="btn btn-danger">-</button>
-                        </form>
+                        </form>-->
                     </div>
                 </div>
 
@@ -88,7 +90,7 @@
         display: flex;
         align-items: center; /* Центрирует кнопки и текст по вертикали */
         justify-content: center; /* Центрирует кнопки в группе */
-        margin-top: 10px; /* Отступ сверху для кнопок */
+        margin-top: 20px; /* Отступ сверху для кнопок */
     }
 
     .btn {

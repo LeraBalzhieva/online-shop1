@@ -16,6 +16,7 @@ class OrderService
     private UserProduct $userProductModel;
     private OrderProduct $orderProductModel;
     private AuthInterface $authService;
+    private CartService $cartService;
 
     public function __construct()
     {
@@ -24,9 +25,15 @@ class OrderService
         $this->orderProductModel = new OrderProduct();
         $this->productModel = new Product();
         $this->authService = new AuthSessionService();
+        $this->cartService = new CartService();
     }
     public function create(OrderCreateDTO $data)
     {
+        $sum = $this->cartService->getSum();
+        if ($sum < 500)
+        {
+            throw new \Exception('Для оформления заказа сумма корзины должна быть больше 500р');
+        }
         $user = $this->authService->getCurrentUser();
         $userProducts = $this->userProductModel->getAllByUserId($user->getId());
 

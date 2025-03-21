@@ -67,7 +67,14 @@ class CartService
             $userProduct->setTotal($total);
         }
         return $userProducts;
-
+    }
+    public function getSum(): int
+    {
+        $total = 0;
+        foreach ($this->getUserProducts() as $userProduct) {
+            $total += $userProduct->getTotal();
+        }
+        return $total;
     }
 
 }

@@ -28,6 +28,20 @@ class UserProduct extends Model
         return $results;
     }
 
+    public function getAllByUserId(int $userId): array
+    {
+        $stmt = $this->pdo->prepare("SELECT * FROM {$this->getTableName()} WHERE user_id = :userId");
+        $stmt->execute([':userId' => $userId]);
+        $result = $stmt->fetchAll();
+
+        $results = [];
+        foreach ($result as $product) {
+            $results[] = $this->hydrate($product);
+        }
+        return $results;
+    }
+
+
     public function deleteByUserId(int $userId)
     {
         $stmt = $this->pdo->prepare("DELETE FROM {$this->getTableName()} WHERE user_id = :userId");
