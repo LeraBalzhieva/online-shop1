@@ -42,6 +42,17 @@ class OrderController extends BaseController
             require_once '../Views/order_page.php';
         }
     }
+    public function getUserProducts()
+    {
+        if (!$this->authService->check()) {
+            header('Location: login');
+            exit();
+
+        } else {
+            $userProducts = $this->orderService->getUserProducts();
+        }
+        require_once '../Views/order_page.php';
+    }
     public function getAllOrders()
     {
         if (!$this->authService->check()) {

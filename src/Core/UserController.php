@@ -1,7 +1,8 @@
 <?php
 
-namespace Controller;
+namespace Core;
 
+use Controller\BaseController;
 use Model\User;
 use Request\EditProfileRequest;
 use Request\LoginRequest;

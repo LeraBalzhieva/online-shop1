@@ -1,11 +1,11 @@
 <?php
 
-use Controller\UserController;
-use Controller\ProductController;
-use Controller\OrderController;
 use Controller\CartController;
+use Controller\OrderController;
+use Controller\ProductController;
 use Core\App;
 use Core\Autoloader;
+use Core\UserController;
 
 require_once '../Core/Autoloader.php';
 
@@ -39,7 +39,7 @@ $app->post('/decrease-product', CartController::class, 'decreaseProduct', Reques
 $app->get('/cart', CartController:: class, 'getCart');
 $app->post('/cart', CartController::class, 'getCartPage');
 
-$app->get('/order',CartController:: class, 'getUserProducts');
+$app->get('/order',OrderController:: class, 'getUserProducts');
 $app->post('/order',OrderController::class, 'order', Request\OrderRequest::class);
 
 $app->get('/orderProduct', OrderController:: class, 'getAllOrders');

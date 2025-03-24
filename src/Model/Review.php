@@ -9,38 +9,41 @@ class Review extends Model
     private int $rating;
     private string $comment;
     private $createdAt;
-    protected function getTableName(): string
+    protected static function getTableName(): string
     {
         return 'reviews';
     }
 
-    public function getReviews(int $productId): array
+    public static function getReviews(int $productId): array
     {
-        $stmt = $this->pdo->prepare("SELECT * FROM {$this->getTableName()} WHERE product_id = :product_id");
+        $tableName = static::getTableName();
+        $stmt = static::getPDO()->prepare("SELECT * FROM $tableName WHERE product_id = :product_id");
         $stmt->execute(['product_id' => $productId]);
         $result = $stmt->fetchAll();
         $results = [];
         foreach ($result as $product) {
-            $results[] = $this->hydrate($product);
+            $results[] = static::hydrate($product);
         }
         return $results;
     }
-    public function getAverageRating($productId)
+    public static function getAverageRating($productId)
     {
-        $stmt = $this->pdo->prepare("SELECT AVG(rating) as average_rating FROM {$this->getTableName()} WHERE product_id = :product_id");
+        $tableName = static::getTableName();
+        $stmt = static::getPDO()->prepare("SELECT AVG(rating) as average_rating FROM $tableName WHERE product_id = :product_id");
         $stmt->execute(['product_id' => $productId]);
         return $stmt->fetchColumn();
     }
-    public function addReview(int $productId, int $userId, int $rating, string $comment)
+    public static function addReview(int $productId, int $userId, int $rating, string $comment)
     {
-        $stmt = $this->pdo->prepare("INSERT INTO {$this->getTableName()} (product_id, user_id, rating, comment) 
+        $tableName = static::getTableName();
+        $stmt = static::getPDO()->prepare("INSERT INTO $tableName (product_id, user_id, rating, comment) 
                                             VALUES (:product_id, :user_id, :rating, :comment)");
         $stmt->execute(['product_id' => $productId, 'user_id' => $userId, 'rating' => $rating, 'comment' => $comment]);
         $result = $stmt->fetch();
         return $result;
     }
 
-    public function hydrate(array $result): self|false
+    public static function hydrate(array $result): self|false
     {
         if (!$result) {
             return false;

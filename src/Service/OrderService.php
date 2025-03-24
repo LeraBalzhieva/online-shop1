@@ -52,6 +52,24 @@ class OrderService
         $this->userProductModel->deleteByUserId($user->getId());
     }
 
+    public function getUserProducts(): array
+    {
+        $user = $this->authService->getCurrentUser();
+        if ($user === null) {
+            return [];
+        }
+        $userProducts = UserProduct::getAllByUserIdWithProducts($user->getId());
+
+        $total = 0;
+
+        foreach ($userProducts as $userProduct) {
+            $product = $this->productModel->getByProduct($userProduct->getProductId());
+            $userProduct->setProduct($product);
+            $total += $userProduct->getAmount() * $userProduct->getProduct()->getPrice();
+            $userProduct->setTotal($total);
+        }
+        return $userProducts;
+    }
     public function getAll(): array
     {
         $user = $this->authService->getCurrentUser();

@@ -56,7 +56,7 @@ class CartService
         if ($user === null) {
             return [];
         }
-        $userProducts = $this->userProductModel->getAllByUserId($user->getId());
+        $userProducts = UserProduct::getAllByUserIdWithProducts($user->getId());
 
         $total = 0;
 

@@ -15,15 +15,16 @@ class Order extends Model
     private int $total;
     private array $orderProducts;
 
-    protected function getTableName(): string
+    protected static function getTableName(): string
     {
         return 'orders';
     }
 
-    public function create(string $name,  string $phone, string $city,  string $address, string $comment, int $userId)
+    public static function create(string $name, string $phone, string $city, string $address, string $comment, int $userId)
     {
-        $stmt = $this->pdo->prepare(
-            "INSERT INTO {$this->getTableName()} (name, phone, city, address, comment, user_id)
+        $tableName = static::getTableName();
+        $stmt = static::getPDO()->prepare(
+            "INSERT INTO $tableName (name, phone, city, address, comment, user_id)
                     VALUES (:name, :phone, :city, :address, :comment, :user_id) RETURNING id"
         );
         $stmt->execute([
@@ -38,9 +39,29 @@ class Order extends Model
         return $result['id'];
     }
 
-    public function getAllByUserId(int $userId): array|null
+    public static function getAllByUserId(int $userId): array|null
     {
-        $stmt = $this->pdo->prepare("SELECT * FROM {$this->getTableName()} WHERE user_id = :userId");
+        $tableName = static::getTableName();
+        $stmt = static::getPDO()->prepare("SELECT * FROM $tableName WHERE user_id = :userId");
+        $stmt->execute(['userId' => $userId]);
+        $orders = $stmt->fetchAll();
+        $newOrder = [];
+        foreach ($orders as $order) {
+            $newOrder[] = static::hydrate($order);
+        }
+        return $newOrder;
+    }
+
+    public function getAllByUserIdWithProducts(int $userId): array|null
+    {
+        $tableName = static::getTableName();
+        $stmt = static::getPDO()->prepare("
+                                    SELECT *
+                                    FROM $tableName o 
+                                    INNER JOIN order_products op ON o.id = op.order_id 
+                                    INNER JOIN products p ON op.product_id = p.id 
+                                    WHERE o.user_id = :userId
+    ");
         $stmt->execute(['userId' => $userId]);
         $orders = $stmt->fetchAll();
         $newOrder = [];
@@ -48,11 +69,10 @@ class Order extends Model
             $newOrder[] = $this->hydrate($order);
         }
         return $newOrder;
-
     }
 
 
-    private function hydrate($orders): self|null
+    public static function hydrate($orders): self|null
     {
         if (!$orders) {
             return null;
@@ -82,6 +102,7 @@ class Order extends Model
     {
         return $this->address;
     }
+
     public function getCity(): string
     {
         return $this->city;
@@ -106,10 +127,12 @@ class Order extends Model
     {
         return $this->total;
     }
+
     public function getOrderProducts(): array
     {
         return $this->orderProducts;
     }
+
     public function setTotal(int $total): void
     {
         $this->total = $total;
@@ -119,7 +142,6 @@ class Order extends Model
     {
         $this->orderProducts = $orderProducts;
     }
-
 
 
 }

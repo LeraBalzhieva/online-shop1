@@ -24,17 +24,17 @@
 
                     <div class="btn-group">
 
-                        <form action="/add-product" method="POST" class="d-inline">
+                        <form class="add-product" action="/add-product" method="POST" onsubmit="return false">
                             <input type="hidden" name="product_id" value="<?php echo $product->getId(); ?>">
                             <input type="hidden" name="amount" value="1">
-                            <button type="submit">Добавить в корзину</button>
+                            <button type="submit" class="btn btn-danger">+</button>
 
 
-                            <!--     </form>
-                        <form action="/decrease-product" method="POST" class="d-inline">
-                            <input type="hidden" name="product_id" value="<?php /*echo $product->getId(); */ ?>">
+                                 </form>
+                        <form class="decrease-product" action="/decrease-product" method="POST"  onsubmit="return false">
+                            <input type="hidden" name="product_id" value="<?php echo $product->getId(); ?>">
                             <button type="submit" class="btn btn-danger">-</button>
-                        </form>-->
+                        </form>
                     </div>
                 </div>
 
@@ -111,3 +111,58 @@
         margin-bottom: 20px;
     }
 </style>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+<script>
+    $("document").ready(function() {
+        $('.add-product').submit(function () {
+
+            var form = $(this);
+            $.ajax({
+                type: 'POST',
+                url: "/add-product",
+                data: form.serialize(),
+                dataType: 'json',
+                success: function (data){
+                    var obj = JSON.parse(data);
+                    form.closest('.card-footer').find('.product-count').text(obj.count);
+                }
+            });
+        });
+
+        $('.decrease-product').submit(function () {
+
+            var form = $(this);
+            $.ajax({
+                type: 'POST',
+                url: "/decrease-product",
+                data: form.serialize(),
+                dataType: 'json',
+                success: function (data){
+                    var obj = JSON.parse(data);
+                    form.closest('.card-footer').find('.product-count').text(obj.count);
+                }
+            });
+        });
+    });
+</script>
+
+
+$("document").ready(function () {
+form.submit(function () {
+$.ajax({
+type: "POST",
+url: "/add-product",
+data: $(this).serialize(),
+dataType: 'json',
+success: function (response) {
+// Обновляем количество товаров в бейдже корзины
+$('.badge').text(response.count);
+},
+error: function(xhr, status, error) {
+console.error('Ошибка при добавлении товара:', error);
+}
+});
+});
+});

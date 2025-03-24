@@ -1,31 +1,39 @@
 <?php
-
 namespace Model;
-
 class Product extends Model
 {
     private int $id;
     private string $name;
     private float $price;
     private string $description;
-    private string $image;
+    private $image;
     private int $total;
-    protected function getTableName(): string
+    public static function getTableName(): string
     {
         return 'products';
     }
-
-    public function getByCatalog(): array|null
+    public static function getByCatalog(): array|null
     {
-        $stmt = $this->pdo->query("SELECT * FROM {$this->getTableName()}");
+        $tableName = static::getTableName();
+        $stmt = static::getPDO()->query("SELECT * FROM $tableName");
         $products = $stmt->fetchAll();
         $newProducts = [];
         foreach ($products as $product) {
-            $newProducts[] = $this->hydrate($product);
+            $newProducts[] = static::hydrate($product);
         }
         return $newProducts;
     }
-    private function hydrate($products): self|null
+
+    public static function getByProduct(int $productId): self|null
+    {
+        $tableName = static::getTableName();
+        $stmt = static::getPDO()->prepare("SELECT * FROM $tableName WHERE id = :productId");
+        $stmt->execute([':productId' => $productId]);
+        $result = $stmt->fetch();
+        return static::hydrate($result);
+    }
+
+    public static function hydrate($products): self|null
     {
         if (!$products) {
             return null;
@@ -38,61 +46,43 @@ class Product extends Model
         $obj->image = $products["image_url"];
         return $obj;
     }
-    public function getByProduct(int $productId): self|null
-    {
-        $stmt = $this->pdo->prepare("SELECT * FROM {$this->getTableName()} WHERE id = :productId");
-        $stmt->execute([':productId' => $productId]);
-        $result = $stmt->fetch();
 
-        return $this->hydrate($result);
 
-    }
         public function getImage(): string
     {
         return $this->image;
     }
-
     public function getDescription(): string
     {
         return $this->description;
     }
-
     public function getPrice(): float
     {
         return $this->price;
     }
-
     public function getName(): string
     {
         return $this->name;
     }
-
     public function getId(): int
     {
         return $this->id;
     }
-
     public function setName($name)
     {
         $this->name = $name;
     }
-
     // Сеттер для цены
     public function setPrice($price)
     {
         $this->price = $price;
     }
-
     // Сеттер для общей суммы
     public function setTotal($total)
     {
         $this->total = $total;
     }
-
     public function getTotal() {
         return $this->total;
     }
-
-
-
 }

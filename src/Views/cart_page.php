@@ -16,17 +16,6 @@
                         <p class="card-text">Итого: <?php echo  $userProduct->getAmount() * $userProduct->getProduct()->getPrice() . " p"; ?> <br></p>
                     </div>
 
-                    <div class="btn-group">
-                        <form action="/add-product" method="POST" class="d-inline">
-                            <input type="hidden" name="product_id" value="<?php echo $userProduct->getProduct()->getId(); ?>">
-                            <input type="hidden" name="amount" value="1">
-                            <button type="submit" class="btn btn-success">+</button>
-                        </form>
-                        <form action="/decrease-product" method="POST" class="d-inline">
-                            <input type="hidden" name="product_id" value="<?php echo $userProduct->getProduct()->getId(); ?>">
-                            <button type="submit" class="btn btn-danger">-</button>
-                        </form>
-                    </div>
 
                 </div>
             <?php endforeach; ?>

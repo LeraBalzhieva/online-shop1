@@ -4,16 +4,17 @@ namespace Model;
 
 class   Log extends Model
 {
-    protected function getTableName(): string
+    protected static function getTableName(): string
     {
         return 'logs';
     }
 
-    public function addLog(string $message, string $file, int $line, $date): array|false
+    public static function addLog(string $message, string $file, int $line, $date): array|false
     {
-        $stmt = $this->pdo->prepare
+        $tableName = static::getTableName();
+        $stmt = static::getPDO()->prepare
         (
-            "INSERT INTO {$this->getTableName()} (message, file, line, date ) 
+            "INSERT INTO $tableName (message, file, line, date ) 
                                             VALUES (:message, :file, :line, :date)"
         );
         $stmt->execute([':message' => $message, ':file' => $file, ':line' => $line, ':date' => $date]);

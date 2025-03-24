@@ -4,18 +4,14 @@ namespace Controller;
 
 use Model\Product;
 use Model\Review;
-use Request\AddProductRequest;
 use Request\AddReviewRequest;
 
 class ProductController extends BaseController
 {
-    private Review $reviewModel;
-    private Product $productModel;
+
     public function __construct()
     {
         parent::__construct();
-        $this->reviewModel = new Review();
-        $this->productModel = new Product();
     }
     public function getCatalog()
     {
@@ -29,7 +25,7 @@ class ProductController extends BaseController
     public function catalog()
     {
         if ($this->authService->check()) {
-            $products = $this->productModel->getByCatalog();
+            $products = Product::getByCatalog();
             require_once '../Views/catalog_page.php';
         } else {
             header("Location: login");
@@ -43,9 +39,9 @@ class ProductController extends BaseController
             exit;
         }
         $productId = (int)$_POST['product_id'];
-        $products = $this->productModel->getByProduct($productId);
-        $reviews = $this->reviewModel->getReviews($productId);
-        $averageRating = (float)$this->reviewModel->getAverageRating($productId);
+        $products = Product::getByProduct($productId);
+        $reviews = Review::getReviews($productId);
+        $averageRating = Review::getAverageRating($productId);
         require_once '../Views/reviews_page.php';
     }
     public function addReviews(AddReviewRequest $request)
@@ -59,7 +55,7 @@ class ProductController extends BaseController
 
             $user = $this->authService->getCurrentUser();
 
-            $review = $this->reviewModel->addReview(
+            $review =Review::addReview(
                 $request->getProductId(),
                 $user->getId(),
                 $request->getRating(),
